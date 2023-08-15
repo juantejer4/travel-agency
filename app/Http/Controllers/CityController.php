@@ -23,4 +23,10 @@ class CityController extends Controller
         $city = City::create($attributes);
         return Response()->json($city);
     }
+
+    public function getCities(){
+        $cities = City::orderby('id','asc')->select('*')->get(); 
+        $response['data'] = $cities;
+        return response()->json($response);
+      }
 }
