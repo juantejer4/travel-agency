@@ -13,4 +13,14 @@ class CityController extends Controller
             'cities' => City::orderBy('id', 'asc')->get()
         ]);
     }
+
+    public function store(Request $request){
+
+        $attributes = $request->validate([
+            'name' => 'required|unique:cities'
+        ]);
+
+        $city = City::create($attributes);
+        return Response()->json($city);
+    }
 }
