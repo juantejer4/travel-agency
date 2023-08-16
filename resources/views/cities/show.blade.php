@@ -125,6 +125,7 @@
             contentType: false,
             success: (cities) => {
               $(".dynamic-tbody").html(generateTableRows(cities.data));
+              $('#error-message').removeClass('visible').addClass('invisible');
             },
             error: function(data) {
               console.log(data);
