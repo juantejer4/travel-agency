@@ -50,18 +50,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script type="text/javascript">
-    document.getElementById("add-city-button").onclick = function() {
-      document.getElementById("add-city-form").classList.remove("invisible");
-      document.getElementById("add-city-form").classList.add("visible");
-    }
-    document.getElementById("cancel-button").onclick = function() {
-      document.getElementById("add-city-form").classList.remove("visible");
-      document.getElementById("add-city-form").classList.add("invisible");
-      document.getElementById("error-message").classList.remove("visible");
-      document.getElementById("error-message").classList.add("invisible");
-      document.getElementById("name").value = "";
-    }
+    $('#add-city-button').click(function() {
+      $('#add-city-form').removeClass('invisible').addClass('visible');
+    });
 
+    $('#cancel-button').click(function() {
+      $('#add-city-form').removeClass('visible').addClass('invisible');
+      $('#error-message').removeClass('visible').addClass('invisible');
+      $('#name').val('');
+    });
 
     $(document).ready(function() {
       $.ajaxSetup({
@@ -82,7 +79,33 @@
           console.log(data);
         }
       });
+      $(document).on('click', 'button.delete', function() {
+        let id = $(this).data('id');
+        $.ajax({
+          url: "cities/" + id,
+          type: 'DELETE',
+          data: {
+            "id": id,
+          },
+          success: function() {
+            $.ajax({
+              type: 'GET',
+              url: 'cities/json' + location.search,
+              cache: false,
+              processData: false,
+              contentType: false,
+              success: (cities) => {
+                $(".dynamic-tbody").html(generateTableRows(cities.data));
+              },
+              error: function(data) {
+                console.log(data);
+              }
+            });
+          }
+        });
+      });
     })
+
     $("#add-city-form").submit(function(e) {
       e.preventDefault();
       var cityData = new FormData(this);
@@ -107,13 +130,12 @@
               console.log(data);
             }
           });
-
+          $('#name').val('');
         },
         error: function(data) {
           $message = data.responseJSON.message;
-          document.getElementById("error-message").textContent = $message;
-          document.getElementById("error-message").classList.remove("invisible");
-          document.getElementById("error-message").classList.add("visible");
+          $('#error-message').text($message);
+          $('#error-message').removeClass('invisible').addClass('visible');
         }
       });
 
@@ -138,10 +160,10 @@
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> - </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> - </td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                      <button type="button" data-id="${city.id}"  class="edit text-indigo-600 hover:text-indigo-900">Edit</button>
                   </td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <a href="#" class="text-red-600 hover:text-red-800">Delete</a>
+                      <button type="button" data-id="${city.id}" class="delete text-red-600 hover:text-red-800">Delete</button>
                   </td>
               </tr>
             `;

@@ -28,5 +28,9 @@ class CityController extends Controller
         $cities = City::orderby('id','asc')->select('*')->paginate();
         $response['data'] = $cities;
         return response()->json($response);
-      }
+    }
+
+    public function destroy($id){
+        City::find($id)->delete($id);
+    }
 }
