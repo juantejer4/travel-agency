@@ -9,8 +9,8 @@ class CityController extends Controller
 {
     public function index(){
 
-        return view('cities.show', [
-            'cities' => City::orderBy('id', 'asc')->get()
+        return view('cities.show',[
+            'links' => City::orderby('id','asc')->select('*')->paginate()->links()
         ]);
     }
 
@@ -24,8 +24,8 @@ class CityController extends Controller
         return Response()->json($city);
     }
 
-    public function getCities(){
-        $cities = City::orderby('id','asc')->select('*')->get(); 
+    public function getCities(Request $request){
+        $cities = City::orderby('id','asc')->select('*')->paginate();
         $response['data'] = $cities;
         return response()->json($response);
       }

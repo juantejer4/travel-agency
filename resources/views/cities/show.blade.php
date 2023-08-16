@@ -35,9 +35,12 @@
               </tr>
             </thead>
             <tbody class="dynamic-tbody divide-y divide-gray-200">
-
             </tbody>
           </table>
+
+          <footer class="p-10">
+            {!! $links !!}
+          </footer>
 
         </div>
       </div>
@@ -68,7 +71,7 @@
       });
       $.ajax({
         type: 'GET',
-        url: "/cities/json",
+        url: 'cities/json' + location.search,
         cache: false,
         processData: false,
         contentType: false,
@@ -102,11 +105,12 @@
       });
     });
 
-    function generateTableRows(data) {
-      var rows = "";
+    function generateTableRows(response) {
+      let rows = "";
+      let cities = response.data;
 
-      data.forEach(function(city) {
-        var row = `
+      cities.forEach(function(city) {
+        let row = `
                     <tr>
                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">${city.id}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${city.name}</td>
