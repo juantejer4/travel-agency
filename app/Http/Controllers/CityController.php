@@ -24,7 +24,7 @@ class CityController extends Controller
         return Response()->json($city);
     }
 
-    public function getCities(Request $request){
+    public function getCities(){
         $cities = City::orderby('id','asc')->select('*')->paginate();
         $response['data'] = $cities;
         return response()->json($response);
