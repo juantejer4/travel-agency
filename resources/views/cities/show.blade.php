@@ -6,7 +6,7 @@
       <input type="text" id="name" name="name" class="bg-gray-100 border border-dashed pl-1.5">
       <button class="bg-blue-100 hover:bg-blue-300 px-4 py-1 rounded-full" type="submit">Add new city</button>
       <button type="button" id="cancel-button" class="bg-red-300 hover:bg-red-500 px-4 py-1 rounded-full select-none">Cancel</button>
-      <p id="error-message" class="col-span-2 justify-self-end mt-1 px-8 text-red-500 text-xs invisible">The name has already been taken.</p>
+      <p id="error-message" class="col-span-2 justify-self-end mt-1 px-8 text-red-500 text-xs invisible">/</p>
     </form>
   </div>
   <div class="px-4 sm:px-6 lg:px-8">
@@ -27,7 +27,8 @@
               <tr>
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Id</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Flights</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Arriving Flights</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Departing Flights</th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                   <span class="sr-only">Edit</span>
                 </th>
@@ -109,6 +110,7 @@
                     <tr>
                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">${city.id}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${city.name}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> - </td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> - </td>
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                             <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
