@@ -102,7 +102,7 @@
       var cityData = new FormData(this);
       $.ajax({
         type: 'POST',
-        url: "{{ route('cities.store') }}",
+        url: "cities",
         data: cityData,
         cache: false,
         processData: false,
