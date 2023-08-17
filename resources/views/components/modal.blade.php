@@ -20,7 +20,7 @@
                                 <input type="hidden" id="city-id" name="id"></span>
                                 <label for="city-name" class="block text-xs font-medium leading-6 text-gray-900">City name</label>
                                 <div class="mt-2">
-                                    <input type="text" name="city-name" id="city-name" class="block border-0 focus:ring-2 focus:ring-indigo-600 focus:ring-inset placeholder:text-gray-400 px-3 py-1.5 ring-1 ring-gray-300 ring-inset rounded-md shadow-sm sm:leading-6 sm:text-sm text-center text-gray-900 w-full">
+                                    <input required type="text" name="city-name" id="city-name" class="block border-0 focus:ring-2 focus:ring-indigo-600 focus:ring-inset placeholder:text-gray-400 px-3 py-1.5 ring-1 ring-gray-300 ring-inset rounded-md shadow-sm sm:leading-6 sm:text-sm text-center text-gray-900 w-full">
                                     <p id="error-message-edit" class="col-span-2 justify-self-end mt-1 text-red-500 text-xs invisible">/</p>
                                 </div>
                             </div>

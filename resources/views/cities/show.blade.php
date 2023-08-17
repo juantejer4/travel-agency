@@ -3,7 +3,7 @@
     <form id="add-city-form" method="POST" class="grid-cols-4 inline-grid space-x-1.5 invisible">
       <input type="hidden" id="id" name="id">
       <label for="name" class="justify-self-end pt-1">City name:</label>
-      <input type="text" id="name" name="name" class="bg-gray-100 border border-dashed pl-1.5">
+      <input required type="text" id="name" name="name" class="bg-gray-100 border border-dashed pl-1.5">
       <button class="bg-blue-100 hover:bg-blue-300 px-4 py-1 rounded-full" type="submit">Add new city</button>
       <button type="button" id="cancel-button" class="bg-red-300 hover:bg-red-500 px-4 py-1 rounded-full select-none">Cancel</button>
       <p id="error-message" class="col-span-2 justify-self-end mt-1 px-8 text-red-500 text-xs invisible">/</p>
