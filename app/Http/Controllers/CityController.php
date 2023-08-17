@@ -30,6 +30,16 @@ class CityController extends Controller
         return response()->json($response);
     }
 
+    public function update(Request $request, $id){
+        $attributes = $request->validate([
+            'name' => 'required|unique:cities'
+        ]);
+        
+        City::find($id)->update([
+            'name' => $request->name
+        ]);
+    }
+
     public function destroy($id){
         City::find($id)->delete($id);
     }
