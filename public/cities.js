@@ -21,7 +21,7 @@
       });
       $.ajax({
         type: 'GET',
-        url: 'cities/json' + location.search,
+        url: `api/cities/json${location.search}`,
         cache: false,
         processData: false,
         contentType: false,
@@ -35,7 +35,7 @@
       $(document).on('click', 'button.delete', function() {
         let id = $(this).data('id');
         $.ajax({
-          url: "cities/" + id,
+          url: `api/cities/${id}`,
           type: 'DELETE',
           data: {
             "id": id,
@@ -43,7 +43,7 @@
           success: function() {
             $.ajax({
               type: 'GET',
-              url: 'cities/json' + location.search,
+              url: `api/cities/json${location.search}`,
               cache: false,
               processData: false,
               contentType: false,
@@ -63,12 +63,12 @@
       });
     })
 
-    $(document).on('click', '#name-update', function() {
+    $(document).on('click', '#name-update', function(e) {
       let id = $('#city-id').val();
       var name = $('#city-name').val();
-
+      e.preventDefault();
       $.ajax({
-        url: 'cities/' + id,
+        url: `api/cities/${id}`,
         type: 'PUT',
         data: {
           name: name
@@ -76,7 +76,7 @@
         success: function(data) {
           $.ajax({
               type: 'GET',
-              url: 'cities/json' + location.search,
+              url: `api/cities/json${location.search}`,
               cache: false,
               processData: false,
               contentType: false,
@@ -102,7 +102,7 @@
       var cityData = new FormData(this);
       $.ajax({
         type: 'POST',
-        url: "cities",
+        url: 'api/cities',
         data: cityData,
         cache: false,
         processData: false,
@@ -110,7 +110,7 @@
         success: (data) => {
           $.ajax({
             type: 'GET',
-            url: 'cities/json' + location.search,
+            url: `api/cities/json${location.search}`,
             cache: false,
             processData: false,
             contentType: false,
