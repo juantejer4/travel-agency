@@ -21,7 +21,7 @@
       });
       $.ajax({
         type: 'GET',
-        url: `api/cities/json${location.search}`,
+        url: `api/cities${location.search}`,
         cache: false,
         processData: false,
         contentType: false,
@@ -43,7 +43,7 @@
           success: function() {
             $.ajax({
               type: 'GET',
-              url: `api/cities/json${location.search}`,
+              url: `api/cities${location.search}`,
               cache: false,
               processData: false,
               contentType: false,
@@ -76,7 +76,7 @@
         success: function(data) {
           $.ajax({
               type: 'GET',
-              url: `api/cities/json${location.search}`,
+              url: `api/cities${location.search}`,
               cache: false,
               processData: false,
               contentType: false,
@@ -110,7 +110,7 @@
         success: (data) => {
           $.ajax({
             type: 'GET',
-            url: `api/cities/json${location.search}`,
+            url: `api/cities${location.search}`,
             cache: false,
             processData: false,
             contentType: false,

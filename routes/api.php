@@ -12,5 +12,5 @@ Route::group(['prefix' => 'cities'], function () {
     Route::post('/', [CityController::class, 'store'])->name('cities.store');
     Route::delete('/{city}', [CityController::class, 'destroy'])->name('cities.destroy');
     Route::put('/{city}', [CityController::class, 'update'])->name('cities.update');
-    Route::get('/json', [CityController::class, 'getCities'])->name('cities.json');
+    Route::get('/', [CityController::class, 'getCities']);
 });
