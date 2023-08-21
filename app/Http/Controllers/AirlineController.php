@@ -19,4 +19,9 @@ class AirlineController extends Controller
         $response['data'] = $airlines;
         return response()->json($response);
     }
+
+    public function destroy(Airline $airline) : JsonResponse {
+        $airline->delete();
+        return response()->json(['success' => 'Airline deleted']);
+    }
 }

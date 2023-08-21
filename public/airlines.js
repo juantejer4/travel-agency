@@ -39,6 +39,45 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(`api/airlines${location.search}`);
       console.error('Fetch error:', error);
     });
+
+    document.addEventListener("click", function(event) {
+        if (event.target && event.target.matches("button.delete")) {
+          let id = event.target.dataset.id;
+          
+          fetch(`api/airlines/${id}`, {
+            method: 'DELETE',
+            body: JSON.stringify({ id: id }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(() => {
+            return fetch(`api/airlines${location.search}`, {
+              method: 'GET'
+            });
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            const cities = data.data;
+            document.querySelector(".dynamic-tbody").innerHTML = generateAirlinesTableRows(cities);
+          })
+          .catch(error => {
+            console.error('Fetch error:', error);
+          });
+        }
+      });
+      
   });
   
   function generateAirlinesTableRows(response) {
