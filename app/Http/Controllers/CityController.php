@@ -11,7 +11,7 @@ class CityController
 {
     public function index() : View{
         return view('cities.show',[
-            'links' => City::orderby('id','asc')->paginate()->links()
+            'links' => City::paginate()->links()
         ]);
     }
 
