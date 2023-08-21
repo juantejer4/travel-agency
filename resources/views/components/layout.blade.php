@@ -41,7 +41,7 @@
                     <line class="cls-1" x1="8.18" y1="13.91" x2="10.09" y2="13.91"></line>
                 </g>
             </svg>
-            <div class="flex px-24 text-xl uppercase">
+            <div class="flex px-24 text-xl uppercase opacity-60">
                 <a href="cities" class="hover:text-gray-400 px-12">Cities</a>
                 <a href="airlines" class="hover:text-gray-400 px-12">Airlines</a>
             </div>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Airline;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class AirlineController extends Controller
@@ -12,5 +12,11 @@ class AirlineController extends Controller
         return view('airlines.show',[
             'links' => Airline::paginate()->links()
         ]);
+    }
+
+    public function getAirlines() : JsonResponse{
+        $airlines = Airline::paginate();
+        $response['data'] = $airlines;
+        return response()->json($response);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AirlineController;
 use App\Http\Controllers\CityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -13,4 +14,8 @@ Route::group(['prefix' => 'cities'], function () {
     Route::delete('/{city}', [CityController::class, 'destroy'])->name('cities.destroy');
     Route::put('/{city}', [CityController::class, 'update'])->name('cities.update');
     Route::get('/', [CityController::class, 'getCities']);
+});
+
+Route::group(['prefix' => 'airlines'], function () {
+    Route::get('/', [AirlineController::class, 'getAirlines']);
 });
