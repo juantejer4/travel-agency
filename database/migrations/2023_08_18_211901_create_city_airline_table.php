@@ -11,22 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('city_airline', function (Blueprint $table) {
+        Schema::create('airline_city', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('airline_id');
-
+            $table->foreignId('airline_id')->constrained();
+            $table->foreignId('city_id')->constrained();
             $table->unique(['city_id','airline_id']);
-
-            $table->foreign('city_id')
-                    ->references('id')
-                    ->on('cities')
-                    ->onDelete('cascade');
-
-            $table->foreign('airline_id')
-                    ->references('id')
-                    ->on('airlines')
-                    ->onDelete('cascade');
         });
     }
 
@@ -35,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('city_airline');
+        Schema::dropIfExists('airline_city');
     }
 };

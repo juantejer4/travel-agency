@@ -18,5 +18,6 @@ Route::group(['prefix' => 'cities'], function () {
 
 Route::group(['prefix' => 'airlines'], function () {
     Route::get('/', [AirlineController::class, 'getAirlines']);
+    Route::post('/', [AirlineController::class, 'store'])->name('airlines.store');
     Route::delete('/{airline}', [AirlineController::class, 'destroy'])->name('airlines.destroy');
 });

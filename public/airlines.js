@@ -1,16 +1,16 @@
-document.getElementById('add-airline-button').addEventListener('click', function() {
-    var addAirlineForm = document.getElementById('add-airline-form');
-    addAirlineForm.classList.remove('invisible');
-    addAirlineForm.classList.add('visible');
+document.getElementById('open-create-modal-button').addEventListener('click', function() {
+    let createModal = document.getElementById('create-modal');
+    createModal.classList.remove('invisible');
+    createModal.classList.add('visible');
 });
   
-document.getElementById('cancel-button').addEventListener('click', function() {
-  var addAirlineForm = document.getElementById('add-airline-form');
-  var errorMessage = document.getElementById('error-message');
-  var nameInput = document.getElementById('name');
+document.getElementById('cancel-create-button').addEventListener('click', function() {
+  let createModal = document.getElementById('create-modal');
+  let nameInput = document.getElementById('name');
+  let errorMessage = document.getElementById('error-message');
 
-  addAirlineForm.classList.remove('visible');
-  addAirlineForm.classList.add('invisible');
+  createModal.classList.remove('visible');
+  createModal.classList.add('invisible');
   
   errorMessage.classList.remove('visible');
   errorMessage.classList.add('invisible');
@@ -69,8 +69,8 @@ document.addEventListener("DOMContentLoaded", function() {
             return response.json();
           })
           .then(data => {
-            const cities = data.data;
-            document.querySelector(".dynamic-tbody").innerHTML = generateAirlinesTableRows(cities);
+            const airlines = data.data;
+            document.querySelector(".dynamic-tbody").innerHTML = generateAirlinesTableRows(airlines);
           })
           .catch(error => {
             console.error('Fetch error:', error);
@@ -78,6 +78,56 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
       
+      document.getElementById('create-airline-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        let name = document.getElementById("new-name").value;
+        let description = document.getElementById("new-description").value;
+        let cities = selectedCities();
+
+        const data = {
+          name: name,
+          description: description,
+          cities: cities
+        };
+
+        console.log(JSON.stringify(data));
+        
+        fetch('api/airlines', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          let createModal = document.getElementById('create-modal');
+          let errorMessage = document.getElementById('new-name-error-message');
+          createModal.classList.remove('visible');
+          createModal.classList.add('invisible');
+          errorMessage.classList.remove('visible');
+          errorMessage.classList.add('invisible');
+
+          fetch(`api/airlines${location.search}`, {
+            method: 'GET',
+          })
+          .then(response => {
+            return response.json();
+          })
+          .then(data => {
+            const airlines = data.data;
+            document.querySelector(".dynamic-tbody").innerHTML = generateAirlinesTableRows(airlines);
+          }) 
+        })
+        .catch(error => {
+          let errorMessage = document.getElementById('new-name-error-message');
+          errorMessage.classList.remove('invisible');
+          errorMessage.classList.add('visible');
+          errorMessage.innerText = error;
+        });
+    });
   });
   
   function generateAirlinesTableRows(response) {
@@ -103,4 +153,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 </td>
             </tr>
           `;
+  }
+
+  function selectedCities() {
+    let createModal = document.getElementById("create-modal");
+    let checkboxes = createModal.querySelectorAll('input[type="checkbox"]');
+    let checkedCities = [];
+    checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked) {
+            let city = checkbox.name;
+            checkedCities.push(city);
+        }
+    });
+    return checkedCities;
   }
