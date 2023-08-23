@@ -28,11 +28,8 @@ class AirlineController extends Controller
             'description' => $attributes['description']
         ]);
 
-
-        //dd($attributes['cities']);
         if (isset($attributes['cities'])) {
-            $cities = City::whereIn('name',$attributes['cities'])->get(); //VERE DOCS DEL WHERE
-            //dd($cities);
+            $cities = City::whereIn('name',$attributes['cities'])->get();
             $airline->cities()->attach($cities);
         }        
         
