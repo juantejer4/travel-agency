@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('airline_city', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('airline_id')->constrained();
-            $table->foreignId('city_id')->constrained();
-            $table->unique(['city_id','airline_id']);
+            $table->foreignId('airline_id')->constrained()->onDelete('cascade');
+            $table->foreignId('city_id')->constrained()->onDelete('cascade');
+            $table->unique(['city_id', 'airline_id']);
         });
     }
 
