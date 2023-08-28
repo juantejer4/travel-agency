@@ -22,7 +22,7 @@ class AirlineController extends Controller
     public function store(Request $request): JsonResponse
     {
         $attributes = $request->validate([
-            'name' => ['required', 'unique:airlines'],
+            'name' => ['required', Rule::unique('airlines')],
             'description' => ['nullable'],
             'cities' => ['nullable']
         ]);
@@ -41,6 +41,7 @@ class AirlineController extends Controller
 
     public function getAirlines(): JsonResponse
     {
+        $response = [];
         $airlines = Airline::with('cities')->paginate();
         $response['data'] = $airlines;
         return response()->json($response);
@@ -51,7 +52,7 @@ class AirlineController extends Controller
         $attributes = $request->validate([
             'name' => ['required', Rule::unique('airlines')->ignore($airline->id)],
             'description' => ['nullable'],
-            'cities' => ['nullable']
+            'cities' => ['array']
         ]);
 
         $airline->update([
@@ -59,13 +60,11 @@ class AirlineController extends Controller
             'description' => $attributes['description']
         ]);
 
+        $cities = [];
         if (isset($attributes['cities'])) {
             $cities = City::whereIn('name', $attributes['cities'])->get();
-            $airline->cities()->sync($cities);
-        } else {
-
-            $airline->cities()->detach();
         }
+        $airline->cities()->sync($cities);
 
         return response()->json(['success' => 'City updated']);
     }
