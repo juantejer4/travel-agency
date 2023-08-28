@@ -11,14 +11,16 @@ use Illuminate\View\View;
 
 class AirlineController extends Controller
 {
-    public function index() : View{
-        return view('airlines.show',[
+    public function index(): View
+    {
+        return view('airlines.show', [
             'links' => Airline::paginate()->links(),
             'cities' => City::all()
         ]);
     }
 
-    public function store(Request $request) : JsonResponse{
+    public function store(Request $request): JsonResponse
+    {
         $attributes = $request->validate([
             'name' => ['required', 'unique:airlines'],
             'description' => ['nullable'],
@@ -30,31 +32,33 @@ class AirlineController extends Controller
         ]);
 
         if (isset($attributes['cities'])) {
-            $cities = City::whereIn('name',$attributes['cities'])->get();
+            $cities = City::whereIn('name', $attributes['cities'])->get();
             $airline->cities()->attach($cities);
-        }        
-        
+        }
+
         return response()->json($airline);
     }
 
-    public function getAirlines() : JsonResponse{
+    public function getAirlines(): JsonResponse
+    {
         $airlines = Airline::with('cities')->paginate();
         $response['data'] = $airlines;
         return response()->json($response);
     }
 
-    public function update(Request $request, Airline $airline) : JsonResponse{
+    public function update(Request $request, Airline $airline): JsonResponse
+    {
         $attributes = $request->validate([
             'name' => ['required', Rule::unique('airlines')->ignore($airline->id)],
             'description' => ['nullable'],
             'cities' => ['nullable']
         ]);
-    
+
         $airline->update([
             'name' => $attributes['name'],
             'description' => $attributes['description']
         ]);
-    
+
         if (isset($attributes['cities'])) {
             $cities = City::whereIn('name', $attributes['cities'])->get();
             $airline->cities()->sync($cities);
@@ -62,12 +66,13 @@ class AirlineController extends Controller
 
             $airline->cities()->detach();
         }
-    
-        return response()->json(['success'=>'City updated']);
-    }
-    
 
-    public function destroy(Airline $airline) : JsonResponse {
+        return response()->json(['success' => 'City updated']);
+    }
+
+
+    public function destroy(Airline $airline): JsonResponse
+    {
         $airline->delete();
         return response()->json(['success' => 'Airline deleted']);
     }
