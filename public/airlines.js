@@ -1,95 +1,6 @@
 const createModal = document.getElementById("create-modal");
 const editModal = document.getElementById("edit-modal");
 
-document
-    .getElementById("open-create-modal-button")
-    .addEventListener("click", function () {
-        createModal.classList.remove("invisible");
-        createModal.classList.add("visible");
-    });
-
-document
-    .getElementById("create-airline-form")
-    .addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        let id = document.getElementById("id").value;
-        let name = document.getElementById("new-name").value;
-        let description = document.getElementById("new-description").value;
-        let errorMessage = document.getElementById("new-name-error-message");
-        errorMessage.classList.add("invisible");
-        let cities = selectedCities(createModal);
-
-        const data = {
-            name: name,
-            description: description,
-            cities: cities,
-        };
-
-        fetch("api/airlines", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then((errorJson) => {
-                        throw new Error(errorJson.message);
-                    });
-                }
-                return response.json();
-            })
-            .then((data) => {
-                errorMessage.classList.add("invisible");
-
-                fetch(`api/airlines${location.search}`, {
-                    method: "GET",
-                })
-                    .then((response) => {
-                        return response.json();
-                    })
-                    .then((data) => {
-                        const airlines = data.data;
-                        document.querySelector(".dynamic-tbody").innerHTML =
-                            generateAirlinesTableRows(airlines);
-                        createModal.classList.add("invisible");
-                        document.getElementById("new-name").value = "";
-                    });
-            })
-            .catch((error) => {
-                errorMessage.classList.remove("invisible");
-                errorMessage.innerText = error;
-            });
-        errorMessage.classList.add("invisible");
-        resetCheckboxes();
-    });
-
-document
-    .getElementById("cancel-create-button")
-    .addEventListener("click", function () {
-        let nameInput = document.getElementById("new-name");
-        let errorMessage = document.getElementById("error-message");
-
-        createModal.classList.add("invisible");
-        errorMessage.classList.add("invisible");
-
-        nameInput.value = "";
-    });
-
-document
-    .getElementById("cancel-edit-button")
-    .addEventListener("click", function () {
-        let errorMessage = document.getElementById("edit-name-error-message");
-
-        editModal.classList.add("invisible");
-        errorMessage.classList.add("invisible");
-
-        resetCheckboxes();
-    });
-
 document.addEventListener("DOMContentLoaded", function () {
     fetch(`api/airlines${location.search}`, {
         method: "GET",
@@ -106,6 +17,95 @@ document.addEventListener("DOMContentLoaded", function () {
             const airlines = data.data;
             document.querySelector(".dynamic-tbody").innerHTML =
                 generateAirlinesTableRows(airlines);
+        });
+
+        document
+        .getElementById("open-create-modal-button")
+        .addEventListener("click", function () {
+            createModal.classList.remove("invisible");
+            createModal.classList.add("visible");
+        });
+    
+    document
+        .getElementById("create-airline-form")
+        .addEventListener("submit", function (event) {
+            event.preventDefault();
+    
+            let id = document.getElementById("id").value;
+            let name = document.getElementById("new-name").value;
+            let description = document.getElementById("new-description").value;
+            let errorMessage = document.getElementById("new-name-error-message");
+            errorMessage.classList.add("invisible");
+            let cities = selectedCities(createModal);
+    
+            const data = {
+                name: name,
+                description: description,
+                cities: cities,
+            };
+    
+            fetch("api/airlines", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return response.json().then((errorJson) => {
+                            throw new Error(errorJson.message);
+                        });
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    errorMessage.classList.add("invisible");
+    
+                    fetch(`api/airlines${location.search}`, {
+                        method: "GET",
+                    })
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            const airlines = data.data;
+                            document.querySelector(".dynamic-tbody").innerHTML =
+                                generateAirlinesTableRows(airlines);
+                            createModal.classList.add("invisible");
+                            document.getElementById("new-name").value = "";
+                        });
+                })
+                .catch((error) => {
+                    errorMessage.classList.remove("invisible");
+                    errorMessage.innerText = error;
+                });
+            errorMessage.classList.add("invisible");
+            resetCheckboxes();
+        });
+    
+    document
+        .getElementById("cancel-create-button")
+        .addEventListener("click", function () {
+            let nameInput = document.getElementById("new-name");
+            let errorMessage = document.getElementById("error-message");
+    
+            createModal.classList.add("invisible");
+            errorMessage.classList.add("invisible");
+    
+            nameInput.value = "";
+        });
+    
+    document
+        .getElementById("cancel-edit-button")
+        .addEventListener("click", function () {
+            let errorMessage = document.getElementById("edit-name-error-message");
+    
+            editModal.classList.add("invisible");
+            errorMessage.classList.add("invisible");
+    
+            resetCheckboxes();
         });
 
     document.addEventListener("click", function (event) {
