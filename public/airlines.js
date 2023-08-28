@@ -19,7 +19,6 @@ document
       );
       errorMessage.classList.add("invisible");
       let cities = selectedCities(createModal);
-      console.log(cities);
 
       const data = {
           name: name,
@@ -27,14 +26,22 @@ document
           cities: cities,
       };
 
-      fetch('api/airlines', {
+      fetch("api/airlines", {
           method: "POST",
           headers: {
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              Accept: "application/json",
           },
           body: JSON.stringify(data),
       })
-          .then((response) => response.json())
+          .then((response) => {
+              if (!response.ok) {
+                  return response.json().then((errorJson) => {
+                      throw new Error(errorJson.message);
+                  });
+              }
+              return response.json();
+          })
           .then((data) => {
               errorMessage.classList.add("invisible");
 
@@ -46,10 +53,10 @@ document
                   })
                   .then((data) => {
                       const airlines = data.data;
-                      document.querySelector(".dynamic-tbody").innerHTML = generateAirlinesTableRows(airlines);
+                      document.querySelector(".dynamic-tbody").innerHTML =
+                          generateAirlinesTableRows(airlines);
                       createModal.classList.add("invisible");
-                      document.getElementById("new-name").value = '';
-
+                      document.getElementById("new-name").value = "";
                   });
           })
           .catch((error) => {
@@ -178,7 +185,6 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             errorMessage.classList.add("invisible");
             let cities = selectedCities(editModal);
-            console.log(cities);
 
             const data = {
                 name: name,
@@ -189,13 +195,21 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(`api/airlines/${id}`, {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json"
-                    
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
                 },
                 body: JSON.stringify(data),
             })
-                .then((response) => response.json())
+                .then((response) => {
+                  if (!response.ok) {
+                    return response.json().then((errorJson) => {
+                        throw new Error(errorJson.message);
+                    });
+                }
+                  return response.json()
+                })
                 .then((data) => {
+                  console.log(data);
                     errorMessage.classList.add("invisible");
                     editModal.classList.add("invisible");
 
