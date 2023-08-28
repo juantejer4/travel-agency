@@ -58,11 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             throw new Error(errorJson.message);
                         });
                     }
-                    return response.json();
                 })
                 .then((data) => {
-                    errorMessage.classList.add("invisible");
-    
                     fetch(`api/airlines${location.search}`, {
                         method: "GET",
                     })
