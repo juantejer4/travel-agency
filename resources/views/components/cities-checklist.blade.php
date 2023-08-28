@@ -5,7 +5,7 @@
   <div class="my-2 pl-10">
       <div class="grid grid-cols-3">
         @foreach ($cities as $city )
-            <x-checkbox :city="$city"/>
+            <x-checkbox :city="$city" :mode="$attributes->get('data-mode')"/>
         @endforeach
       </div>
   </div>
