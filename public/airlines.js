@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
             editModal.classList.add("invisible");
             errorMessage.classList.add("invisible");
 
-            resetCheckboxes();
         });
 
     document.addEventListener("click", function (event) {
@@ -122,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     .getElementById(`airline-${id}`)
                     .getAttribute("data-airline")
             );
+            resetCheckboxes();
             airline.cities.forEach((city) => {
                 const cityCheckbox = document.querySelector(
                     `input[id="edit-${city.name}"]`
@@ -190,17 +190,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     errorMessage.innerText = error;
                 });
             errorMessage.classList.add("invisible");
-            resetCheckboxes();
         });
 });
 
 function generateAirlinesTableRows(response) {
-    let rows = "";
     let airlines = response.data;
-    airlines.forEach(function (airline) {
-        rows += generateAirlineRow(airline);
-    });
-    return rows;
+    return airlines.map(generateAirlineRow).join('');;
 }
 function generateAirlineRow(airline) {
     return `
@@ -233,16 +228,13 @@ function generateAirlineRow(airline) {
 }
 
 function selectedCities(modal) {
-    let checkboxes = modal.querySelectorAll('input[type="checkbox"]');
-    let checkedCities = [];
-    checkboxes.forEach(function (checkbox) {
-        if (checkbox.checked) {
-            let city = checkbox.name;
-            checkedCities.push(city);
-        }
-    });
-    return checkedCities;
+  let checkboxes = modal.querySelectorAll('input[type="checkbox"]');
+  let checkedCities = Array.from(checkboxes)
+      .filter(checkbox => checkbox.checked)
+      .map(checkbox => checkbox.name);
+  return checkedCities;
 }
+
 
 function resetCheckboxes() {
     let checkboxes = document.querySelectorAll('input[type="checkbox"]');
