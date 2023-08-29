@@ -2,22 +2,7 @@ const createModal = document.getElementById("create-modal");
 const editModal = document.getElementById("edit-modal");
 
 document.addEventListener("DOMContentLoaded", function () {
-    fetch(`api/airlines${location.search}`, {
-        method: "GET",
-        headers: {
-            "X-CSRF-TOKEN": document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content"),
-        },
-    })
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            const airlines = data.data;
-            document.querySelector(".dynamic-tbody").innerHTML =
-                generateAirlinesTableRows(airlines);
-        });
+    getAirlines();
 
     document
         .getElementById("open-create-modal-button")
@@ -58,18 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 })
                 .then((data) => {
-                    fetch(`api/airlines${location.search}`, {
-                        method: "GET",
-                    })
-                        .then((response) => {
-                            return response.json();
-                        })
-                        .then((data) => {
-                            const airlines = data.data;
-                            document.querySelector(".dynamic-tbody").innerHTML =
-                                generateAirlinesTableRows(airlines);
-                            clearCreateForm();
-                        });
+                    getAirlines();
+                    clearCreateForm();
                 })
                 .catch((error) => {
                     errorMessage.classList.remove("invisible");
@@ -208,17 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     errorMessage.classList.add("invisible");
                     editModal.classList.add("invisible");
 
-                    fetch(`api/airlines${location.search}`, {
-                        method: "GET",
-                    })
-                        .then((response) => {
-                            return response.json();
-                        })
-                        .then((data) => {
-                            const airlines = data.data;
-                            document.querySelector(".dynamic-tbody").innerHTML =
-                                generateAirlinesTableRows(airlines);
-                        });
+                    getAirlines();
                 })
                 .catch((error) => {
                     errorMessage.classList.remove("invisible");
@@ -292,4 +257,23 @@ function clearCreateForm() {
     document.getElementById("new-name").value = "";
     document.getElementById("new-description").value = "";
     resetCheckboxes();
+}
+
+function getAirlines() {
+    fetch(`api/airlines${location.search}`, {
+        method: "GET",
+        headers: {
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        },
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            const airlines = data.data;
+            document.querySelector(".dynamic-tbody").innerHTML =
+                generateAirlinesTableRows(airlines);
+        });
 }
