@@ -24,7 +24,7 @@ class AirlineController extends Controller
         $attributes = $request->validate([
             'name' => ['required', Rule::unique('airlines')],
             'description' => ['nullable'],
-            'cities' => ['nullable']
+            'cities' => ['array']
         ]);
         $airline = Airline::create([
             'name' => $attributes['name'],

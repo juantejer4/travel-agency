@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $cities = City::factory(5)->create();
-        $airlines = Airline::factory(3)->create();
+        $cities = City::factory(10)->create();
+        $airlines = Airline::factory(5)->create();
 
         foreach ($airlines as $airline) {
             // Relates every city with all or some airlines

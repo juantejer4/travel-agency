@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('airline_city', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('airline_id')->constrained()->onDelete('cascade');
-            $table->foreignId('city_id')->constrained()->onDelete('cascade');
+            $table->foreignId('airline_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
             $table->unique(['city_id', 'airline_id']);
         });
     }
