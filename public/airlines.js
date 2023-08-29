@@ -19,31 +19,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 generateAirlinesTableRows(airlines);
         });
 
-        document
+    document
         .getElementById("open-create-modal-button")
         .addEventListener("click", function () {
             createModal.classList.remove("invisible");
             createModal.classList.add("visible");
         });
-    
+
     document
         .getElementById("create-airline-form")
         .addEventListener("submit", function (event) {
             event.preventDefault();
-    
-            let id = document.getElementById("id").value;
-            let name = document.getElementById("new-name").value;
-            let description = document.getElementById("new-description").value;
-            let errorMessage = document.getElementById("new-name-error-message");
+
+            let errorMessage = document.getElementById(
+                "new-name-error-message"
+            );
             errorMessage.classList.add("invisible");
-            let cities = selectedCities(createModal);
-    
+
             const data = {
-                name: name,
-                description: description,
-                cities: cities,
+                name: document.getElementById("new-name").value,
+                description: document.getElementById("new-description").value,
+                cities: selectedCities(createModal),
             };
-    
+
             fetch("api/airlines", {
                 method: "POST",
                 headers: {
@@ -81,27 +79,29 @@ document.addEventListener("DOMContentLoaded", function () {
             errorMessage.classList.add("invisible");
             resetCheckboxes();
         });
-    
+
     document
         .getElementById("cancel-create-button")
         .addEventListener("click", function () {
             let nameInput = document.getElementById("new-name");
             let errorMessage = document.getElementById("error-message");
-    
+
             createModal.classList.add("invisible");
             errorMessage.classList.add("invisible");
-    
+
             nameInput.value = "";
         });
-    
+
     document
         .getElementById("cancel-edit-button")
         .addEventListener("click", function () {
-            let errorMessage = document.getElementById("edit-name-error-message");
-    
+            let errorMessage = document.getElementById(
+                "edit-name-error-message"
+            );
+
             editModal.classList.add("invisible");
             errorMessage.classList.add("invisible");
-    
+
             resetCheckboxes();
         });
 
