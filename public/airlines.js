@@ -68,28 +68,19 @@ document.addEventListener("DOMContentLoaded", function () {
                             const airlines = data.data;
                             document.querySelector(".dynamic-tbody").innerHTML =
                                 generateAirlinesTableRows(airlines);
-                            createModal.classList.add("invisible");
-                            document.getElementById("new-name").value = "";
+                            clearCreateForm();
                         });
                 })
                 .catch((error) => {
                     errorMessage.classList.remove("invisible");
                     errorMessage.innerText = error;
                 });
-            errorMessage.classList.add("invisible");
-            resetCheckboxes();
         });
 
     document
         .getElementById("cancel-create-button")
         .addEventListener("click", function () {
-            let nameInput = document.getElementById("new-name");
-            let errorMessage = document.getElementById("error-message");
-
-            createModal.classList.add("invisible");
-            errorMessage.classList.add("invisible");
-
-            nameInput.value = "";
+            clearCreateForm();
         });
 
     document
@@ -293,4 +284,12 @@ function resetCheckboxes() {
     checkboxes.forEach((checkbox) => {
         checkbox.checked = false;
     });
+}
+
+function clearCreateForm() {
+    createModal.classList.add("invisible");
+    document.getElementById("new-name-error-message").classList.add("invisible");
+    document.getElementById("new-name").value = "";
+    document.getElementById("new-description").value = "";
+    resetCheckboxes();
 }
