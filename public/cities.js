@@ -1,15 +1,15 @@
 $("#add-city-button").click(function () {
-    $("#add-city-form").removeClass("invisible").addClass("visible");
+    show("#add-city-form");
 });
 $("#cancel-button").click(function () {
-    $("#add-city-form").removeClass("visible").addClass("invisible");
-    $("#error-message").removeClass("visible").addClass("invisible");
+    hide("#add-city-form");
+    hide("#error-message");
     $("#name").val("");
 });
 $(document).ready(function () {
     $(".closeModal").on("click", function (e) {
         $("#interestModal").addClass("invisible");
-        $("#error-message-edit").removeClass("visible").addClass("invisible");
+        hide("#error-message-edit");
     });
     $.ajaxSetup({
         headers: {
@@ -91,9 +91,9 @@ $(document).on("click", "#name-update", function (e) {
                 .addClass("invisible");
         },
         error: function (data) {
-            $message = data.responseJSON.message;
-            console.log($message);
-            $("#error-message-edit").text($message);
+            message = data.responseJSON.message;
+            console.log(message);
+            $("#error-message-edit").text(message);
             $("#error-message-edit")
                 .removeClass("invisible")
                 .addClass("visible");
@@ -129,9 +129,9 @@ $("#add-city-form").submit(function (e) {
             $("#name").val("");
         },
         error: function (data) {
-            $message = data.responseJSON.message;
-            $("#error-message").text($message);
-            $("#error-message").removeClass("invisible").addClass("visible");
+            message = data.responseJSON.message;
+            $("#error-message").text(message);
+            show("#error-message");
         },
     });
 });
@@ -158,4 +158,12 @@ function generateCityRow(city) {
               </td>
           </tr>
         `;
+}
+
+function hide(element) {
+    $(element).removeClass("visible").addClass("invisible");
+}
+
+function show(element) {
+    $(element).removeClass("invisible").addClass("visible");
 }
