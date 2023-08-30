@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function generateFlightsTableRows(response) {
     let flights = response.data;
+    console.log(flights);
     const rows = await Promise.all(flights.map(generateFlightRow));
     return rows.join('');
 }
@@ -26,10 +27,10 @@ async function generateFlightRow(flight) {
                     destinationName
                 }</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
-                    flight.departure_time
+                    formatDate(flight.departure_time)
                 }</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
-                    flight.arrival_time
+                    formatDate(flight.arrival_time)
                 }</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                     <button type="button" data-id="${
@@ -92,4 +93,14 @@ async function getAirlineNameById(id) {
     } catch (error) {
         console.log(error);
     }
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear().toString().substr(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes} - ${month}/${day}/${year} `;
 }
