@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AirlineController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\FlightController;
 use Database\Factories\AirlineFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,8 @@ Route::group(['prefix' => 'airlines', 'controller' => AirlineController::class],
     Route::post('/', 'store')->name('airlines.store');
     Route::delete('/{airline}', 'destroy')->name('airlines.destroy');
     Route::put('/{airline}', 'update')->name('airlines.update');
+});
+
+Route::group(['prefix' => 'flights', 'controller' => FlightController::class], function () {
+    Route::get('/', 'getFlights');
 });
