@@ -47,9 +47,6 @@ class CityController
     }
 
     public function getCityById(City $city) : JsonResponse {
-        return response()->json([
-            'id' => $city->id,
-            'name' => $city->name
-        ]);
+        return response()->json($city);
     }
 }

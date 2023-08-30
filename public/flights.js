@@ -11,6 +11,7 @@ async function generateFlightsTableRows(response) {
 async function generateFlightRow(flight) {
     const originName = await getCityNameById(flight.origin_city_id);
     const destinationName = await getCityNameById(flight.destination_city_id);
+    const airlineName = await getAirlineNameById(flight.airline_id);
     return `
             <tr id="flight-${flight.id}" data-flight='${JSON.stringify(flight)}'>
 
@@ -18,7 +19,7 @@ async function generateFlightRow(flight) {
                     flight.id
                 }</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
-                    flight.airline_id
+                    airlineName
                 }</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${originName}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
@@ -72,7 +73,21 @@ async function getCityNameById(id) {
                 "X-CSRF-TOKEN": csrfToken,
             },
         });
-        console.log(response.data.name);
+        return response.data.name;
+    } catch (error) {
+        console.log(error);
+    }
+}
+async function getAirlineNameById(id) {
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+    try {
+        const response = await axios.get(`api/airlines/${id}`, {
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+        });
         return response.data.name;
     } catch (error) {
         console.log(error);

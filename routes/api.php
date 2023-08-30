@@ -24,6 +24,7 @@ Route::group(['prefix' => 'airlines', 'controller' => AirlineController::class],
     Route::post('/', 'store')->name('airlines.store');
     Route::delete('/{airline}', 'destroy')->name('airlines.destroy');
     Route::put('/{airline}', 'update')->name('airlines.update');
+    Route::get('/{airline}', 'getAirlineById');
 });
 
 Route::group(['prefix' => 'flights', 'controller' => FlightController::class], function () {
