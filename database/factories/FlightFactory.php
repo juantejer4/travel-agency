@@ -17,17 +17,17 @@ class FlightFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-{
-    $departureTime = $this->faker->dateTimeBetween('now', '+1 month');
-    $arrivalTime = $this->faker->dateTimeBetween($departureTime, $departureTime->modify('+6 hours'));
+    {
+        $departureTime = $this->faker->dateTimeBetween('now', '+1 month');
+        $modifiedDepartureTime = clone $departureTime;
+        $arrivalTime = $this->faker->dateTimeBetween($departureTime, $modifiedDepartureTime->modify('+6 hours'));
 
-    return [
-        'departure_time' => $departureTime,
-        'arrival_time' => $arrivalTime,
-        'airline_id' => Airline::factory(),
-        'origin_city_id' => City::factory(),
-        'destination_city_id' => City::factory()
-    ];
-}
-
+        return [
+            'departure_time' => $departureTime,
+            'arrival_time' => $arrivalTime,
+            'airline_id' => Airline::factory(),
+            'origin_city_id' => City::factory(),
+            'destination_city_id' => City::factory()
+        ];
+    }
 }
