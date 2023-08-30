@@ -45,4 +45,11 @@ class CityController
         $city->delete();
         return response()->json(['success' => 'City deleted']);
     }
+
+    public function getCityById(City $city) : JsonResponse {
+        return response()->json([
+            'id' => $city->id,
+            'name' => $city->name
+        ]);
+    }
 }
