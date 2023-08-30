@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class City extends Model
+class Airline extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
-    protected $fillable = ['name'];
+    protected $guarded = [];
 
-    public function airlines() : BelongsToMany
+    public function cities() : BelongsToMany
     {
-        return $this->belongsToMany(Airline::class, 'airline_city', 'airline_id', 'city_id') ;
+        return $this->belongsToMany(City::class);
     }
 }
