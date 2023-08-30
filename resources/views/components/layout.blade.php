@@ -44,6 +44,7 @@
             <div class="flex px-24 text-xl uppercase opacity-60">
                 <a href="cities" class="hover:text-gray-400 px-12">Cities</a>
                 <a href="airlines" class="hover:text-gray-400 px-12">Airlines</a>
+                <a href="flights" class="hover:text-gray-400 px-12">Flights</a>
             </div>
         </nav>
 
