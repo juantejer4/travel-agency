@@ -3,7 +3,6 @@
 use App\Http\Controllers\AirlineController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FlightController;
-use Database\Factories\AirlineFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,4 +28,5 @@ Route::group(['prefix' => 'airlines', 'controller' => AirlineController::class],
 
 Route::group(['prefix' => 'flights', 'controller' => FlightController::class], function () {
     Route::get('/', 'getFlights');
+    Route::delete('/{flight}', 'destroy');
 });

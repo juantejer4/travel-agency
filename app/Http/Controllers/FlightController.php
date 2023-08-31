@@ -20,4 +20,10 @@ class FlightController extends Controller
         return response()->json($response);
     }
 
+    public function destroy(Flight $flight): JsonResponse
+    {
+        $flight->delete();
+        return response()->json(['success' => 'Flight deleted']);
+    }
+
 }

@@ -2,9 +2,31 @@ document.addEventListener("DOMContentLoaded", function () {
     getFlights();
 });
 
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.matches("button.delete")) {
+        let id = event.target.dataset.id;
+        axios
+            .delete(`api/flights/${id}`, {
+                data: { id: id },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error(
+                        `Network response was not ok: ${response.status}`
+                    );
+                }
+                getFlights();
+                return response.data;
+            });
+    }
+});
+
+
 async function generateFlightsTableRows(response) {
     let flights = response.data;
-    console.log(flights);
     const rows = await Promise.all(flights.map(generateFlightRow));
     return rows.join('');
 }
