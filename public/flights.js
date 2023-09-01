@@ -1,6 +1,6 @@
 const modal = document.querySelector(".relative.z-10");
 document.addEventListener("DOMContentLoaded", function () {
-    getFlights();
+    showFlights();
 
     const closeButton = document.querySelector(
         ".absolute.right-0.top-0.hidden.pr-4.pt-4.sm\\:block button"
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         `Network response was not ok: ${response.status}`
                     );
                 }
-                getFlights();
+                showFlights();
                 return response.data;
             });
         modal.classList.add("hidden");
@@ -50,16 +50,17 @@ document.addEventListener("click", function (event) {
     }
 });
 
-async function generateFlightsTableRows(response) {
+function generateFlightsTableRows(response) {
     let flights = response.data;
-    const rows = await Promise.all(flights.map(generateFlightRow));
+    const rows = flights.map(generateFlightRow);
     return rows.join("");
 }
 
-async function generateFlightRow(flight) {
-    const originName = await getCityNameById(flight.origin_city_id);
-    const destinationName = await getCityNameById(flight.destination_city_id);
-    const airlineName = await getAirlineNameById(flight.airline_id);
+
+function generateFlightRow(flight) {
+    const originName = flight.origin.name;
+    const destinationName = flight.destination.name;
+    const airlineName = flight.airline.name;
     return `
             <tr id="flight-${flight.id}" data-flight='${JSON.stringify(
         flight
@@ -91,50 +92,24 @@ async function generateFlightRow(flight) {
           `;
 }
 
-async function getFlights() {
+function showFlights() {
     const csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
     try {
-        const response = await axios.get(`api/flights${location.search}`, {
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-        });
-        const flights = response.data.data;
-        const rows = await generateFlightsTableRows(flights);
-        document.querySelector(".dynamic-tbody").innerHTML = rows;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-async function getCityNameById(id) {
-    const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-    try {
-        const response = await axios.get(`api/cities/${id}`, {
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-        });
-        return response.data.name;
-    } catch (error) {
-        console.log(error);
-    }
-}
-async function getAirlineNameById(id) {
-    const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-    try {
-        const response = await axios.get(`api/airlines/${id}`, {
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-        });
-        return response.data.name;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `api/flights${location.search}`);
+        xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const flights = JSON.parse(xhr.responseText).data;
+                const rows = generateFlightsTableRows(flights);
+                document.querySelector(".dynamic-tbody").innerHTML = rows;
+            } else {
+                console.log('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send();
     } catch (error) {
         console.log(error);
     }

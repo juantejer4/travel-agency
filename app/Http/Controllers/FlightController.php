@@ -15,7 +15,7 @@ class FlightController extends Controller
 
     public function getFlights(): JsonResponse
     {
-        $flights = Flight::paginate();
+        $flights = Flight::with('origin','destination','airline')->paginate();
         $response['data'] = $flights;
         return response()->json($response);
     }
