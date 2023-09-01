@@ -27,19 +27,19 @@
         </div>
     </div>
 
-    <x-modal-box mode="create">
-        <x-modal-header title="Create new airline">
-            <x-modal-airlines-content mode="new" :cities="$cities"/>
-        </x-modal-header>
-        <x-buttons mode="create" />
-    </x-modal-box>
+    <x-modal.box mode="create">
+        <x-modal.header title="Create new airline">
+            <x-modal.airlines-content mode="new" :cities="$cities"/>
+        </x-modal.header>
+        <x-modal.buttons mode="create" />
+    </x-modal.box>
 
-    <x-modal-box mode="edit">
-        <x-modal-header title="Edit airline">
-            <x-modal-airlines-content mode="edit" :cities="$cities"/>
+    <x-modal.box mode="edit">
+        <x-modal.header title="Edit airline">
+            <x-modal.airlines-content mode="edit" :cities="$cities"/>
         </x-modal-header>
-        <x-buttons mode="edit" />
-    </x-modal-box>
+        <x-modal.buttons mode="edit" />
+    </x-modal.box>
 
     <script src="/airlines.js"></script>
 
