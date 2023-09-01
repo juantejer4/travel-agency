@@ -1,10 +1,25 @@
+const modal = document.querySelector(".relative.z-10");
 document.addEventListener("DOMContentLoaded", function () {
     getFlights();
-});
 
-document.addEventListener("click", function (event) {
-    if (event.target && event.target.matches("button.delete")) {
-        let id = event.target.dataset.id;
+    const closeButton = document.querySelector(
+        ".absolute.right-0.top-0.hidden.pr-4.pt-4.sm\\:block button"
+    );
+    const cancelButton = document.querySelector("#cancel-flight-deletion");
+    const deleteButton = document.querySelector("#delete-flight");
+
+    closeButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("block");
+    });
+
+    cancelButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("block");
+    });
+
+    deleteButton.addEventListener("click", () => {
+        let id = (modal.dataset.id);
         axios
             .delete(`api/flights/${id}`, {
                 data: { id: id },
@@ -21,14 +36,24 @@ document.addEventListener("click", function (event) {
                 getFlights();
                 return response.data;
             });
-    }
+        modal.classList.add("hidden");
+        modal.classList.remove("block");
+    });
 });
 
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.matches("button.delete")) {
+        let id = event.target.dataset.id;
+        modal.classList.add("block");
+        modal.classList.remove("hidden");
+        modal.dataset.id = id;
+    }
+});
 
 async function generateFlightsTableRows(response) {
     let flights = response.data;
     const rows = await Promise.all(flights.map(generateFlightRow));
-    return rows.join('');
+    return rows.join("");
 }
 
 async function generateFlightRow(flight) {
@@ -36,24 +61,22 @@ async function generateFlightRow(flight) {
     const destinationName = await getCityNameById(flight.destination_city_id);
     const airlineName = await getAirlineNameById(flight.airline_id);
     return `
-            <tr id="flight-${flight.id}" data-flight='${JSON.stringify(flight)}'>
+            <tr id="flight-${flight.id}" data-flight='${JSON.stringify(
+        flight
+    )}'>
 
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">${
                     flight.id
                 }</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
-                    airlineName
-                }</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${airlineName}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${originName}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
-                    destinationName
-                }</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
-                    formatDate(flight.departure_time)
-                }</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
-                    formatDate(flight.arrival_time)
-                }</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${destinationName}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${formatDate(
+                    flight.departure_time
+                )}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${formatDate(
+                    flight.arrival_time
+                )}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                     <button type="button" data-id="${
                         flight.id
@@ -120,9 +143,9 @@ async function getAirlineNameById(id) {
 function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear().toString().substr(-2);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes} - ${month}/${day}/${year} `;
 }
