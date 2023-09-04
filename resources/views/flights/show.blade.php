@@ -1,4 +1,19 @@
 <x-layout>
+    <div class="flex pb-10 px-20">
+        <div class="flex flex-col flex-1">
+            <label for="airlines" class="">Select an airline</label>
+            <select class="airlines" id="airlines" name="airlines"></select>
+        </div>
+        <div class="flex flex-col flex-1">
+            <label for="origin_city" class="">Select an origin</label>
+            <select class="origin_city" id="origin_city" name="origin_city"></select>
+        </div>
+        <div class="flex flex-col flex-1">
+            <label for="destination_city" class="">Select a destination</label>
+            <select class="destiantion_city" id="destiantion_city" name="destiantion_city"></select>
+        </div>
+    </div>
+
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">

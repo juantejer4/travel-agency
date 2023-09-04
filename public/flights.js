@@ -56,7 +56,6 @@ function generateFlightsTableRows(response) {
     return rows.join("");
 }
 
-
 function generateFlightRow(flight) {
     const originName = flight.origin.name;
     const destinationName = flight.destination.name;
@@ -114,6 +113,25 @@ function showFlights() {
         console.log(error);
     }
 }
+
+$(document).ready(function() {
+    $('.airlines').select2({
+        placeholder: 'Airline',
+        width: '80%'
+    });
+});
+$(document).ready(function() {
+    $('.origin_city').select2({
+        placeholder: 'Origin',
+        width: '80%'
+    });
+});
+$(document).ready(function() {
+    $('.destiantion_city').select2({
+        placeholder: 'Destination',
+        width: '80%'
+    });
+});
 
 function formatDate(dateString) {
     const date = new Date(dateString);
