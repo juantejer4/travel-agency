@@ -1,6 +1,25 @@
-const modal = document.querySelector(".relative.z-10");
+const deleteModal = document.querySelector(".relative.z-10");
+const createModal = document.getElementById("create-modal");
+const arrivalTime = document.querySelector('#arrival-time');
+const departureTime = document.querySelector('#departure-time');
+
 document.addEventListener("DOMContentLoaded", function () {
     showFlights();
+
+    departureTime.min = new Date().toISOString().slice(0, 16);
+    arrivalTime.min = departureTime.value;
+    document
+        .getElementById("open-create-modal-button")
+        .addEventListener("click", function () {
+            createModal.classList.remove("invisible");
+            createModal.classList.add("visible");
+        });
+
+    document
+        .getElementById("cancel-create-button")
+        .addEventListener("click", function () {
+            createModal.classList.add("invisible");
+        });
 
     const closeButton = document.querySelector(
         ".absolute.right-0.top-0.hidden.pr-4.pt-4.sm\\:block button"
@@ -9,17 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const deleteButton = document.querySelector("#delete-flight");
 
     closeButton.addEventListener("click", () => {
-        modal.classList.add("hidden");
-        modal.classList.remove("block");
+        deleteModal.classList.add("hidden");
+        deleteModal.classList.remove("block");
     });
 
     cancelButton.addEventListener("click", () => {
-        modal.classList.add("hidden");
-        modal.classList.remove("block");
+        deleteModal.classList.add("hidden");
+        deleteModal.classList.remove("block");
     });
 
     deleteButton.addEventListener("click", () => {
-        let id = (modal.dataset.id);
+        let id = (deleteModal.dataset.id);
         axios
             .delete(`api/flights/${id}`, {
                 data: { id: id },
@@ -36,17 +55,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 showFlights();
                 return response.data;
             });
-        modal.classList.add("hidden");
-        modal.classList.remove("block");
+        deleteModal.classList.add("hidden");
+        deleteModal.classList.remove("block");
     });
 });
 
 document.addEventListener("click", function (event) {
     if (event.target && event.target.matches("button.delete")) {
         let id = event.target.dataset.id;
-        modal.classList.add("block");
-        modal.classList.remove("hidden");
-        modal.dataset.id = id;
+        deleteModal.classList.add("block");
+        deleteModal.classList.remove("hidden");
+        deleteModal.dataset.id = id;
     }
 });
 
@@ -114,24 +133,33 @@ function showFlights() {
     }
 }
 
-$(document).ready(function() {
+$(document).ready(async function() {
     $('.airlines').select2({
         placeholder: 'Airline',
-        width: '80%'
+        width: '100%'
     });
-});
-$(document).ready(function() {
     $('.origin_city').select2({
         placeholder: 'Origin',
-        width: '80%'
+        width: '100%'
     });
-});
-$(document).ready(function() {
     $('.destiantion_city').select2({
         placeholder: 'Destination',
-        width: '80%'
+        width: '100%'
     });
+    
+    $(".airlines").select2({
+        data: await getAirlinesSelect2Format()
+    })
+    $(".origin_city").select2({
+        data: await getCitiesSelect2Format()
+    })
+    $(".destiantion_city").select2({
+        data: await getCitiesSelect2Format()
+    })
+
 });
+
+  
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -141,4 +169,39 @@ function formatDate(dateString) {
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes} - ${month}/${day}/${year} `;
+}
+
+departureTime.addEventListener('change', function() {
+    arrivalTime.min = departureTime.value;
+});
+
+async function getAirlinesSelect2Format() {
+    try {
+        const response = await axios.get('api/airlines');
+        const airlinesUnformattedJson = response.data.data.data;
+        return convertArrayToJson(airlinesUnformattedJson);
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function getCitiesSelect2Format() {
+    try {
+        const response = await axios.get('api/cities');
+        const airlinesUnformattedJson = response.data.data.data;
+        return convertArrayToJson(airlinesUnformattedJson);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function convertArrayToJson(input) {
+    var output = [];
+    for (var i = 0; i < input.length; i++) {
+        var item = input[i];
+        output.push({
+            id: item.id,
+            text: item.name
+        });
+    }
+    return output;
 }
