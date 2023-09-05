@@ -1,5 +1,5 @@
 const deleteModal = document.querySelector(".relative.z-10");
-const createModal = document.getElementById("create-modal");
+const createModal = document.querySelector("#create-modal");
 const arrivalTime = document.querySelector('#arrival-time');
 const departureTime = document.querySelector('#departure-time');
 
@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .getElementById("cancel-create-button")
         .addEventListener("click", function () {
             createModal.classList.add("invisible");
+            
+            cleanModal(createModal);
         });
 
     const closeButton = document.querySelector(
@@ -154,39 +156,39 @@ $(document).ready(async function() {
         width: '100%',
         disabled: 'true'
     });
-    $('.departure-time').select2({
-        disabled: 'true'
-    });
 });
 
 $(".airlines").on("change", function() {
     let selectedAirlineId = $(this).val();
-    let selectedAirline = airlines.find(airline => airline.id == selectedAirlineId);
-    cities = selectedAirline.cities.map(city => city.name);
-
-    cities = formatCities(cities);
-
-    $('.origin_city').empty().append('<option></option>').select2({
-        data: cities,
-        placeholder: 'Origin'
-    });
-    $('.destiantion_city').empty().append('<option></option>').select2({
-        placeholder: 'Destination'
-    });
-
-    $(".origin_city").prop("disabled", false);
-    $(".destiantion_city").prop("disabled", true);
+    if(selectedAirlineId != ""){
+        let selectedAirline = airlines.find(airline => airline.id == selectedAirlineId);
+        cities = selectedAirline.cities.map(city => city.name);
     
+        cities = formatCities(cities);
+    
+        $('.origin_city').empty().append('<option></option>').select2({
+            data: cities,
+            placeholder: 'Origin'
+        });
+        $('.destiantion_city').empty().append('<option></option>').select2({
+            placeholder: 'Destination'
+        });
+    
+        $(".origin_city").prop("disabled", false);
+        $(".destiantion_city").prop("disabled", true);
+    }
 });
 
 $('.origin_city').on('change', function() {
     let selectedCityId = $(this).val();
-    let destinationCities = cities.filter(city => city.id != selectedCityId);
-    $('.destiantion_city').empty().append('<option></option>').select2({
-        data: destinationCities,
-        placeholder: "Destination"
-    })
-    $(".destiantion_city").prop("disabled", false);
+    if (cities != undefined) {
+        let destinationCities = cities.filter(city => city.id != selectedCityId);
+        $('.destiantion_city').empty().append('<option></option>').select2({
+            data: destinationCities,
+            placeholder: "Destination"
+        })
+        $(".destiantion_city").prop("disabled", false);
+    }
 });
 $('#departure-time').on('change', function() {
     $('#arrival-time').prop('disabled', false);
@@ -241,4 +243,14 @@ function formatCities(input) {
         });
     }
     return output;
+}
+
+function cleanModal(modal) {
+    $(".airlines", modal).val(null).trigger("change");
+    $(".origin_city", modal).val(null).trigger("change");
+    $(".destiantion_city", modal).val(null).trigger("change");
+    $(".origin_city", modal).prop("disabled", true);
+    $(".destiantion_city", modal).prop("disabled", true);
+    $(".departure-time", modal).val("");
+    $(".arrival-time", modal).val("");
 }

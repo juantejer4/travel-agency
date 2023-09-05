@@ -15,10 +15,10 @@
 
 <div class="py-1.5">
     <label for="departure-time">Departure time:</label>
-    <input type="datetime-local" id="departure-time" name="departure-time" required/>
+    <input type="datetime-local" id="departure-time" class="departure-time" name="departure-time" required/>
 </div>
 
 <div class="py-1.5">
     <label for="arrival-time">Arrival time:</label>
-    <input type="datetime-local" id="arrival-time" name="arrival-time" disabled required/>
+    <input type="datetime-local" id="arrival-time" class="arrival-time" name="arrival-time" disabled required/>
 </div>
