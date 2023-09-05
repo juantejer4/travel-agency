@@ -3,6 +3,9 @@ const createModal = document.getElementById("create-modal");
 const arrivalTime = document.querySelector('#arrival-time');
 const departureTime = document.querySelector('#departure-time');
 
+var airlines;
+var cities;
+
 document.addEventListener("DOMContentLoaded", function () {
     showFlights();
 
@@ -70,7 +73,7 @@ document.addEventListener("click", function (event) {
 });
 
 function generateFlightsTableRows(response) {
-    let flights = response.data;
+    flights = response.data;
     const rows = flights.map(generateFlightRow);
     return rows.join("");
 }
@@ -134,32 +137,69 @@ function showFlights() {
 }
 
 $(document).ready(async function() {
+    await getAirlines();
+
     $('.airlines').select2({
+        data: formatAirlines(airlines),
         placeholder: 'Airline',
         width: '100%'
     });
     $('.origin_city').select2({
         placeholder: 'Origin',
-        width: '100%'
+        width: '100%',
+        disabled: 'true'
     });
     $('.destiantion_city').select2({
         placeholder: 'Destination',
-        width: '100%'
+        width: '100%',
+        disabled: 'true'
     });
-    
-    $(".airlines").select2({
-        data: await getAirlinesSelect2Format()
-    })
-    $(".origin_city").select2({
-        data: await getCitiesSelect2Format()
-    })
-    $(".destiantion_city").select2({
-        data: await getCitiesSelect2Format()
-    })
-
+    $('.departure-time').select2({
+        disabled: 'true'
+    });
 });
 
-  
+$(".airlines").on("change", function() {
+    let selectedAirlineId = $(this).val();
+    let selectedAirline = airlines.find(airline => airline.id == selectedAirlineId);
+    cities = selectedAirline.cities.map(city => city.name);
+
+    cities = formatCities(cities);
+
+    $('.origin_city').empty().append('<option></option>').select2({
+        data: cities,
+        placeholder: 'Origin'
+    });
+    $('.destiantion_city').empty().append('<option></option>').select2({
+        placeholder: 'Destination'
+    });
+
+    $(".origin_city").prop("disabled", false);
+    $(".destiantion_city").prop("disabled", true);
+    
+});
+
+$('.origin_city').on('change', function() {
+    let selectedCityId = $(this).val();
+    let destinationCities = cities.filter(city => city.id != selectedCityId);
+    $('.destiantion_city').empty().append('<option></option>').select2({
+        data: destinationCities,
+        placeholder: "Destination"
+    })
+    $(".destiantion_city").prop("disabled", false);
+});
+$('#departure-time').on('change', function() {
+    $('#arrival-time').prop('disabled', false);
+    $('#arrival-time').prop('min', $(this).val());
+});
+$('#arrival-time').on('change', function() {
+    let arrivalTime = new Date($(this).val());
+    let departureTime = new Date($('#departure-time').val());
+
+    if(departureTime > arrivalTime){
+        $(this).val('');
+    }
+});
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -171,36 +211,33 @@ function formatDate(dateString) {
     return `${hours}:${minutes} - ${month}/${day}/${year} `;
 }
 
-departureTime.addEventListener('change', function() {
-    arrivalTime.min = departureTime.value;
-});
-
-async function getAirlinesSelect2Format() {
+async function getAirlines() {
     try {
         const response = await axios.get('api/airlines');
-        const airlinesUnformattedJson = response.data.data.data;
-        return convertArrayToJson(airlinesUnformattedJson);
-    } catch (error) {
-        console.error(error);
-    }
-}
-async function getCitiesSelect2Format() {
-    try {
-        const response = await axios.get('api/cities');
-        const airlinesUnformattedJson = response.data.data.data;
-        return convertArrayToJson(airlinesUnformattedJson);
+        airlines = response.data.data.data;
     } catch (error) {
         console.error(error);
     }
 }
 
-function convertArrayToJson(input) {
+function formatAirlines(input) {
     var output = [];
     for (var i = 0; i < input.length; i++) {
         var item = input[i];
         output.push({
             id: item.id,
             text: item.name
+        });
+    }
+    return output;
+}
+
+function formatCities(input) {
+    var output = [];
+    for (var i = 0; i < input.length; i++) {
+        output.push({
+            id: i+1,
+            text: input[i]
         });
     }
     return output;
