@@ -4,13 +4,13 @@
 </div>
 
 <div class="flex flex-col flex-1 py-1.5">
-    <label for="origin_city" class="">Select an origin</label>
-    <select class="origin_city" id="origin_city" name="origin_city" required></select>
+    <label for="origin-city" class="">Select an origin</label>
+    <select class="origin-city" id="origin-city" name="origin-city" required></select>
 </div>
 
 <div class="flex flex-col flex-1 py-1.5">
-    <label for="destination_city" class="">Select a destination</label>
-    <select class="destiantion_city" id="destiantion_city" name="destiantion_city" disabled required></select>
+    <label for="destination-city" class="">Select a destination</label>
+    <select class="destination-city" id="destination-city" name="destination-city" disabled required></select>
 </div>
 
 <div class="py-1.5">

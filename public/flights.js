@@ -146,12 +146,12 @@ $(document).ready(async function() {
         placeholder: 'Airline',
         width: '100%'
     });
-    $('.origin_city').select2({
+    $('.origin-city').select2({
         placeholder: 'Origin',
         width: '100%',
         disabled: 'true'
     });
-    $('.destiantion_city').select2({
+    $('.destination-city').select2({
         placeholder: 'Destination',
         width: '100%',
         disabled: 'true'
@@ -166,28 +166,28 @@ $(".airlines").on("change", function() {
     
         cities = formatCities(cities);
     
-        $('.origin_city').empty().append('<option></option>').select2({
+        $('.origin-city').empty().append('<option></option>').select2({
             data: cities,
             placeholder: 'Origin'
         });
-        $('.destiantion_city').empty().append('<option></option>').select2({
+        $('.destination-city').empty().append('<option></option>').select2({
             placeholder: 'Destination'
         });
     
-        $(".origin_city").prop("disabled", false);
-        $(".destiantion_city").prop("disabled", true);
+        $(".origin-city").prop("disabled", false);
+        $(".destination-city").prop("disabled", true);
     }
 });
 
-$('.origin_city').on('change', function() {
+$('.origin-city').on('change', function() {
     let selectedCityId = $(this).val();
     if (cities != undefined) {
         let destinationCities = cities.filter(city => city.id != selectedCityId);
-        $('.destiantion_city').empty().append('<option></option>').select2({
+        $('.destination-city').empty().append('<option></option>').select2({
             data: destinationCities,
             placeholder: "Destination"
         })
-        $(".destiantion_city").prop("disabled", false);
+        $(".destination-city").prop("disabled", false);
     }
 });
 $('#departure-time').on('change', function() {
@@ -247,10 +247,10 @@ function formatCities(input) {
 
 function cleanModal(modal) {
     $(".airlines", modal).val(null).trigger("change");
-    $(".origin_city", modal).val(null).trigger("change");
-    $(".destiantion_city", modal).val(null).trigger("change");
-    $(".origin_city", modal).prop("disabled", true);
-    $(".destiantion_city", modal).prop("disabled", true);
+    $(".origin-city", modal).val(null).trigger("change");
+    $(".destination-city", modal).val(null).trigger("change");
+    $(".origin-city", modal).prop("disabled", true);
+    $(".destination-city", modal).prop("disabled", true);
     $(".departure-time", modal).val("");
     $(".arrival-time", modal).val("");
 }
