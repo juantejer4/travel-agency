@@ -17,12 +17,53 @@ document.addEventListener("DOMContentLoaded", function () {
             createModal.classList.remove("invisible");
             createModal.classList.add("visible");
         });
+    document
+        .getElementById("create-form")
+        .addEventListener("submit", function (event) {
+            event.preventDefault();
 
+            let airline = createModal.querySelector(".airlines");
+            let origin = createModal.querySelector(".origin-city");
+            let destination = createModal.querySelector(".destination-city");
+            let departure = createModal.querySelector(".departure-time");
+            let arrival = createModal.querySelector(".arrival-time");
+
+            const data = {
+                airline_id: airline.options[airline.selectedIndex].value,
+                origin_city_id: origin.options[origin.selectedIndex].value,
+                destination_city_id: destination.options[destination.selectedIndex].value,
+                departure_time: departure.value,
+                arrival_time: arrival.value
+            };
+
+            fetch("api/flights", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        return response.json().then((errorJson) => {
+                            throw new Error(errorJson.message);
+                        });
+                    }
+                })
+                .then((data) => {
+                    showFlights();
+                    createModal.classList.add("invisible");
+                    cleanModal(createModal);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        });
     document
         .getElementById("cancel-create-button")
         .addEventListener("click", function () {
             createModal.classList.add("invisible");
-            
             cleanModal(createModal);
         });
 
@@ -162,8 +203,7 @@ $(".airlines").on("change", function() {
     let selectedAirlineId = $(this).val();
     if(selectedAirlineId != ""){
         let selectedAirline = airlines.find(airline => airline.id == selectedAirlineId);
-        cities = selectedAirline.cities.map(city => city.name);
-    
+        cities = selectedAirline.cities.map(city => [city.id, city.name]);
         cities = formatCities(cities);
     
         $('.origin-city').empty().append('<option></option>').select2({
@@ -217,6 +257,7 @@ async function getAirlines() {
     try {
         const response = await axios.get('api/airlines');
         airlines = response.data.data.data;
+
     } catch (error) {
         console.error(error);
     }
@@ -237,9 +278,10 @@ function formatAirlines(input) {
 function formatCities(input) {
     var output = [];
     for (var i = 0; i < input.length; i++) {
+        console.log(input[i][1]);
         output.push({
-            id: i+1,
-            text: input[i]
+            id: input[i][0],
+            text: input[i][1]
         });
     }
     return output;
