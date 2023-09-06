@@ -1,7 +1,6 @@
 const deleteModal = document.querySelector(".relative.z-10");
 const createModal = document.querySelector("#create-modal");
-const arrivalTime = document.querySelector('#arrival-time');
-const departureTime = document.querySelector('#departure-time');
+const editModal = document.querySelector("#edit-modal");
 
 var airlines;
 var cities;
@@ -9,14 +8,16 @@ var cities;
 document.addEventListener("DOMContentLoaded", function () {
     showFlights();
 
-    departureTime.min = new Date().toISOString().slice(0, 16);
-    arrivalTime.min = departureTime.value;
+    createModal.querySelector('.departure-time').min = new Date().toISOString().slice(0, 16);
+    createModal.querySelector('.arrival-time').min = createModal.querySelector('.departure-time').value;
+
     document
         .getElementById("open-create-modal-button")
         .addEventListener("click", function () {
             createModal.classList.remove("invisible");
             createModal.classList.add("visible");
         });
+
     document
         .getElementById("create-form")
         .addEventListener("submit", function (event) {
@@ -31,9 +32,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = {
                 airline_id: airline.options[airline.selectedIndex].value,
                 origin_city_id: origin.options[origin.selectedIndex].value,
-                destination_city_id: destination.options[destination.selectedIndex].value,
+                destination_city_id:
+                    destination.options[destination.selectedIndex].value,
                 departure_time: departure.value,
-                arrival_time: arrival.value
+                arrival_time: arrival.value,
             };
 
             fetch("api/flights", {
@@ -60,50 +62,128 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log(error);
                 });
         });
+
     document
         .getElementById("cancel-create-button")
         .addEventListener("click", function () {
             createModal.classList.add("invisible");
             cleanModal(createModal);
         });
+    document
+        .getElementById("cancel-edit-button")
+        .addEventListener("click", function () {
+            editModal.classList.add("invisible");
+        });
 
-    const closeButton = document.querySelector(
-        ".absolute.right-0.top-0.hidden.pr-4.pt-4.sm\\:block button"
-    );
-    const cancelButton = document.querySelector("#cancel-flight-deletion");
-    const deleteButton = document.querySelector("#delete-flight");
+    document.addEventListener("click", function (event) {
+        if (event.target && event.target.matches("button.edit")) {
+            let id = event.target.dataset.id;
+            let flight = JSON.parse(
+                document
+                .getElementById(`flight-${id}`)
+                .getAttribute("data-flight")
+                );
+            console.log(flight);
+      
+            editModal.querySelector("#id").value = id;
+            if (editModal.querySelector(".airlines").options[0].value == "") {
+                editModal.querySelector(".airlines").options[0].remove();
+            }
+            editModal.querySelector(".airlines").selectedIndex = flight.airline_id-1;
 
-    closeButton.addEventListener("click", () => {
-        deleteModal.classList.add("hidden");
-        deleteModal.classList.remove("block");
+            loadAirlineCities(flight);
+            $(editModal.querySelector(".origin-city")).val(flight.origin_city_id).trigger('change');
+            $(editModal.querySelector(".destination-city")).val(flight.destination_city_id).trigger('change');
+            loadFlightSchedule(editModal, flight);
+            editModal.querySelector(".departure-time").value = flight.departure_time.slice(0, -3);
+            editModal.querySelector(".arrival-time").value = flight.arrival_time.slice(0, -3);
+            editModal.querySelector(".arrival-time").disabled = false;
+
+            editModal.classList.remove("invisible");
+        }
     });
 
-    cancelButton.addEventListener("click", () => {
-        deleteModal.classList.add("hidden");
-        deleteModal.classList.remove("block");
-    });
+    document
+        .getElementById("edit-form")
+        .addEventListener("submit", function (event) {
+            event.preventDefault();
+            let id = editModal.querySelector("#id").value;
+            let airline = editModal.querySelector(".airlines");
+            let origin = editModal.querySelector(".origin-city");
+            let destination = editModal.querySelector(".destination-city");
+            let departure = editModal.querySelector(".departure-time");
+            let arrival = editModal.querySelector(".arrival-time");
 
-    deleteButton.addEventListener("click", () => {
-        let id = (deleteModal.dataset.id);
-        axios
-            .delete(`api/flights/${id}`, {
-                data: { id: id },
+            const data = {
+                airline_id: airline.options[airline.selectedIndex].value,
+                origin_city_id: origin.options[origin.selectedIndex].value,
+                destination_city_id:
+                    destination.options[destination.selectedIndex].value,
+                departure_time: departure.value,
+                arrival_time: arrival.value,
+            };
+
+            fetch(`api/flights/${id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
+                    Accept: "application/json",
                 },
+                body: JSON.stringify(data),
             })
-            .then((response) => {
-                if (response.status !== 200) {
-                    throw new Error(
-                        `Network response was not ok: ${response.status}`
-                    );
-                }
-                showFlights();
-                return response.data;
-            });
-        deleteModal.classList.add("hidden");
-        deleteModal.classList.remove("block");
-    });
+                .then((response) => {
+                    if (!response.ok) {
+                        return response.json().then((errorJson) => {
+                            throw new Error(errorJson.message);
+                        });
+                    }
+                })
+                .then((data) => {
+                    showFlights();
+                    editModal.classList.add("invisible");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        });
+
+        const closeButton = document.querySelector(
+            ".absolute.right-0.top-0.hidden.pr-4.pt-4.sm\\:block button"
+        );
+        const cancelButton = document.querySelector("#cancel-flight-deletion");
+        const deleteButton = document.querySelector("#delete-flight");
+
+        closeButton.addEventListener("click", () => {
+            deleteModal.classList.add("hidden");
+            deleteModal.classList.remove("block");
+        });
+
+        cancelButton.addEventListener("click", () => {
+            deleteModal.classList.add("hidden");
+            deleteModal.classList.remove("block");
+        });
+
+        deleteButton.addEventListener("click", () => {
+            let id = deleteModal.dataset.id;
+            axios
+                .delete(`api/flights/${id}`, {
+                    data: { id: id },
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then((response) => {
+                    if (response.status !== 200) {
+                        throw new Error(
+                            `Network response was not ok: ${response.status}`
+                        );
+                    }
+                    showFlights();
+                    return response.data;
+                });
+            deleteModal.classList.add("hidden");
+            deleteModal.classList.remove("block");
+        });
 });
 
 document.addEventListener("click", function (event) {
@@ -230,13 +310,14 @@ $('.origin-city').on('change', function() {
         $(".destination-city").prop("disabled", false);
     }
 });
-$('#departure-time').on('change', function() {
-    $('#arrival-time').prop('disabled', false);
-    $('#arrival-time').prop('min', $(this).val());
+$('.departure-time').on('change', function() {
+    $('.arrival-time').prop('disabled', false);
+    $('.arrival-time').prop('min', $(this).val());
+    console.log($(this).val());
 });
-$('#arrival-time').on('change', function() {
+$('.arrival-time').on('change', function() {
     let arrivalTime = new Date($(this).val());
-    let departureTime = new Date($('#departure-time').val());
+    let departureTime = new Date($('.departure-time').val());
 
     if(departureTime > arrivalTime){
         $(this).val('');
@@ -278,7 +359,6 @@ function formatAirlines(input) {
 function formatCities(input) {
     var output = [];
     for (var i = 0; i < input.length; i++) {
-        console.log(input[i][1]);
         output.push({
             id: input[i][0],
             text: input[i][1]
@@ -295,4 +375,50 @@ function cleanModal(modal) {
     $(".destination-city", modal).prop("disabled", true);
     $(".departure-time", modal).val("");
     $(".arrival-time", modal).val("");
+}
+
+function loadAirlineCities(flight) {
+    let selectedAirlineId = flight.airline_id;
+    let selectedCityId = flight.origin_city_id;
+    let selectedAirline = airlines.find(
+        (airline) => airline.id == selectedAirlineId
+    );
+    cities = selectedAirline.cities.map((city) => [city.id, city.name]);
+    cities = formatCities(cities);
+    let destinationCities = cities.filter(city => city.id != selectedCityId);
+    
+    $(".origin-city").empty().select2({
+        data: cities
+    });
+    $(".destination-city").empty().select2({
+        data: destinationCities
+    });
+    $(".origin-city").prop("disabled", false);
+    $(".destination-city").prop("disabled", false);
+}
+
+function loadFlightSchedule(modal, flight){
+    modal.querySelector('.departure-time').min = new Date().toISOString().slice(0, 16);
+    modal.querySelector(".departure-time").value = flight.departure_time.slice(0, -3);
+    modal.querySelector('.arrival-time').min = editModal.querySelector('.departure-time').value;
+    modal.querySelector(".arrival-time").value = flight.arrival_time.slice(0, -3);
+    modal.querySelector(".arrival-time").disabled = false;
+}
+///////////
+function requireFormInputs(){
+    $("#edit-modal").find(".airlines").select2({
+        containerCssClass: function(e) {
+            return $(e).attr('required') ? 'required' : '';
+        }
+    });
+    $("#edit-modal").find(".origin-city").select2({
+        containerCssClass: function(e) {
+            return $(e).attr('required') ? 'required' : '';
+        }
+    });
+    $("#edit-modal").find(".destination-city").select2({
+        containerCssClass: function(e) {
+            return $(e).attr('required') ? 'required' : '';
+        }
+    });
 }

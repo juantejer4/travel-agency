@@ -28,6 +28,7 @@ Route::group(['prefix' => 'airlines', 'controller' => AirlineController::class],
 
 Route::group(['prefix' => 'flights', 'controller' => FlightController::class], function () {
     Route::get('/', 'getFlights');
+    Route::put('/{flight}', 'update');
     Route::delete('/{flight}', 'destroy');
     Route::post('/', 'store');
 });

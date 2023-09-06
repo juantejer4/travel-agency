@@ -30,7 +30,13 @@
         </x-modal.header>
         <x-modal.buttons mode="create" />
     </x-modal.box>
-
+    
+    <x-modal.box mode="edit">
+        <x-modal.header title="Edit flight">
+            <x-modal.flights-content />
+        </x-modal.header>
+        <x-modal.buttons mode="edit" />
+    </x-modal.box>
 
     <x-delete-modal />
 

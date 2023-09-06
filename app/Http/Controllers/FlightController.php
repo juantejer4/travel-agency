@@ -36,6 +36,21 @@ class FlightController extends Controller
         return response()->json($flights);
     }
 
+    public function update(Request $request, Flight $flight): JsonResponse
+    {
+        $attributes = $request->validate([
+            'airline_id' => ['required'],
+            'origin_city_id' => ['required'],
+            'destination_city_id' => ['required'],
+            'departure_time' => ['required'],
+            'arrival_time' => ['required']
+        ]);
+
+        $flight->update($attributes);
+
+        return response()->json($flight);
+    }
+
     public function destroy(Flight $flight): JsonResponse
     {
         $flight->delete();
