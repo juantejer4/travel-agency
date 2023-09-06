@@ -26,14 +26,14 @@
 
     <x-modal.box mode="create">
         <x-modal.header title="Create new flight">
-            <x-modal.flights-content />
+            <x-modal.flights-content mode="new" />
         </x-modal.header>
         <x-modal.buttons mode="create" />
     </x-modal.box>
     
     <x-modal.box mode="edit">
         <x-modal.header title="Edit flight">
-            <x-modal.flights-content />
+            <x-modal.flights-content mode="edit" />
         </x-modal.header>
         <x-modal.buttons mode="edit" />
     </x-modal.box>

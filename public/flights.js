@@ -8,7 +8,14 @@ var cities;
 document.addEventListener("DOMContentLoaded", function () {
     showFlights();
 
-    createModal.querySelector('.departure-time').min = new Date().toISOString().slice(0, 16);
+    
+    let date = new Date();
+    let localOffset = date.getTimezoneOffset() * 60000;
+    let localISOTime = new Date(date.getTime() - localOffset).toISOString();
+
+    createModal.querySelector('.departure-time').min = localISOTime.slice(0, 16);
+
+    console.log(new Date().toISOString());
     createModal.querySelector('.arrival-time').min = createModal.querySelector('.departure-time').value;
 
     document
@@ -313,7 +320,6 @@ $('.origin-city').on('change', function() {
 $('.departure-time').on('change', function() {
     $('.arrival-time').prop('disabled', false);
     $('.arrival-time').prop('min', $(this).val());
-    console.log($(this).val());
 });
 $('.arrival-time').on('change', function() {
     let arrivalTime = new Date($(this).val());
@@ -403,22 +409,4 @@ function loadFlightSchedule(modal, flight){
     modal.querySelector('.arrival-time').min = editModal.querySelector('.departure-time').value;
     modal.querySelector(".arrival-time").value = flight.arrival_time.slice(0, -3);
     modal.querySelector(".arrival-time").disabled = false;
-}
-///////////
-function requireFormInputs(){
-    $("#edit-modal").find(".airlines").select2({
-        containerCssClass: function(e) {
-            return $(e).attr('required') ? 'required' : '';
-        }
-    });
-    $("#edit-modal").find(".origin-city").select2({
-        containerCssClass: function(e) {
-            return $(e).attr('required') ? 'required' : '';
-        }
-    });
-    $("#edit-modal").find(".destination-city").select2({
-        containerCssClass: function(e) {
-            return $(e).attr('required') ? 'required' : '';
-        }
-    });
 }
