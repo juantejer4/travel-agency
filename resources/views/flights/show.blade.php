@@ -19,6 +19,10 @@
                         </tbody>
                     </table>
 
+                    <footer class="p-10">
+                        {!! $links !!}
+                    </footer>
+
                 </div>
             </div>
         </div>

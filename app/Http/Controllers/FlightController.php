@@ -12,7 +12,9 @@ class FlightController extends Controller
 {
     public function index(): View
     {
-        return view('flights.show');
+        return view('flights.show', [
+            'links' => Flight::paginate()->links()
+        ]);
     }
 
     public function getFlights(): JsonResponse

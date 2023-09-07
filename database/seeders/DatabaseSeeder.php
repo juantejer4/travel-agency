@@ -19,10 +19,6 @@ class DatabaseSeeder extends Seeder
         $cities = City::factory(10)->create();
         $airlines = Airline::factory()->count(20)->hasCities(2)->create();
 
-        // foreach ($airlines as $airline) {
-        //     // Relates every city with all or some airlines
-        //     $airline->cities()->attach($cities->random(rand(0, $airlines->count())));
-        // }
-        Flight::factory(3)->create();
+        Flight::factory(20)->create();
     }
 }
