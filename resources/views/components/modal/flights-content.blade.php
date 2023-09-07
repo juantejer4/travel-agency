@@ -5,12 +5,12 @@
 
 <div class="flex flex-col flex-1 py-1.5">
     <label for="{{$mode}}-origin-city">Select an origin</label>
-    <select class="origin-city" id="{{$mode}}-origin-city" name="origin-city" required></select>
+    <select class="origin-city" id="{{$mode}}-origin-city" name="origin-city" required><option></option></select>
 </div>
 
 <div class="flex flex-col flex-1 py-1.5">
     <label for="{{$mode}}-destination-city">Select a destination</label>
-    <select class="destination-city" id="{{$mode}}-destination-city" name="destination-city" disabled required></select>
+    <select class="destination-city" id="{{$mode}}-destination-city" name="destination-city" required></select>
 </div>
 
 <div class="py-1.5">

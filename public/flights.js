@@ -1,6 +1,7 @@
 const deleteModal = document.querySelector(".relative.z-10");
 const createModal = document.querySelector("#create-modal");
 const editModal = document.querySelector("#edit-modal");
+const successToast = document.querySelector('#toast');
 
 var airlines;
 var cities;
@@ -8,19 +9,18 @@ var cities;
 document.addEventListener("DOMContentLoaded", function () {
     showFlights();
 
-    
     let date = new Date();
     let localOffset = date.getTimezoneOffset() * 60000;
     let localISOTime = new Date(date.getTime() - localOffset).toISOString();
 
     createModal.querySelector('.departure-time').min = localISOTime.slice(0, 16);
 
-    console.log(new Date().toISOString());
     createModal.querySelector('.arrival-time').min = createModal.querySelector('.departure-time').value;
 
     document
         .getElementById("open-create-modal-button")
         .addEventListener("click", function () {
+            cleanModal(createModal);
             createModal.classList.remove("invisible");
             createModal.classList.add("visible");
         });
@@ -39,8 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = {
                 airline_id: airline.options[airline.selectedIndex].value,
                 origin_city_id: origin.options[origin.selectedIndex].value,
-                destination_city_id:
-                    destination.options[destination.selectedIndex].value,
+                destination_city_id: destination.options[destination.selectedIndex].value,
                 departure_time: departure.value,
                 arrival_time: arrival.value,
             };
@@ -62,8 +61,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then((data) => {
                     showFlights();
+                    successToast.classList.remove("invisible");
                     createModal.classList.add("invisible");
-                    cleanModal(createModal);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -74,13 +73,20 @@ document.addEventListener("DOMContentLoaded", function () {
         .getElementById("cancel-create-button")
         .addEventListener("click", function () {
             createModal.classList.add("invisible");
-            cleanModal(createModal);
         });
     document
         .getElementById("cancel-edit-button")
         .addEventListener("click", function () {
             editModal.classList.add("invisible");
+            cleanModal(editModal);
         });
+
+    document
+        .getElementById("close-toast")
+        .addEventListener("click", function () {
+            successToast.classList.add("invisible");
+        });
+
 
     document.addEventListener("click", function (event) {
         if (event.target && event.target.matches("button.edit")) {
@@ -317,10 +323,12 @@ $('.origin-city').on('change', function() {
         $(".destination-city").prop("disabled", false);
     }
 });
+
 $('.departure-time').on('change', function() {
     $('.arrival-time').prop('disabled', false);
     $('.arrival-time').prop('min', $(this).val());
 });
+
 $('.arrival-time').on('change', function() {
     let arrivalTime = new Date($(this).val());
     let departureTime = new Date($('.departure-time').val());
@@ -342,7 +350,7 @@ function formatDate(dateString) {
 
 async function getAirlines() {
     try {
-        const response = await axios.get('api/airlines');
+        const response = await axios.get('api/airlines?per_page=1000');
         airlines = response.data.data.data;
 
     } catch (error) {

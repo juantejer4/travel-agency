@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     document
-        .getElementById("create-airline-form")
+        .getElementById("create-form")
         .addEventListener("submit", function (event) {
             event.preventDefault();
 
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     document
-        .getElementById("edit-airline-form")
+        .getElementById("edit-form")
         .addEventListener("submit", function (event) {
             event.preventDefault();
 
