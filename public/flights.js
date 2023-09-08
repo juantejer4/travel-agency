@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .getElementById("cancel-edit-button")
         .addEventListener("click", function () {
             editModal.classList.add("invisible");
-            cleanModal(editModal);
         });
 
     document
@@ -97,22 +96,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 .getAttribute("data-flight")
                 );
             console.log(flight);
-      
+            editModal.classList.remove("invisible");
             editModal.querySelector("#id").value = id;
             if (editModal.querySelector(".airlines").options[0].value == "") {
                 editModal.querySelector(".airlines").options[0].remove();
             }
-            editModal.querySelector(".airlines").selectedIndex = flight.airline_id-1;
-
-            loadAirlineCities(flight);
+            $(editModal.querySelector(".airlines")).val(flight.airline_id).trigger('change');
+            
             $(editModal.querySelector(".origin-city")).val(flight.origin_city_id).trigger('change');
             $(editModal.querySelector(".destination-city")).val(flight.destination_city_id).trigger('change');
             loadFlightSchedule(editModal, flight);
-            editModal.querySelector(".departure-time").value = flight.departure_time.slice(0, -3);
-            editModal.querySelector(".arrival-time").value = flight.arrival_time.slice(0, -3);
             editModal.querySelector(".arrival-time").disabled = false;
-
-            editModal.classList.remove("invisible");
         }
     });
 
@@ -389,26 +383,6 @@ function cleanModal(modal) {
     $(".destination-city", modal).prop("disabled", true);
     $(".departure-time", modal).val("");
     $(".arrival-time", modal).val("");
-}
-
-function loadAirlineCities(flight) {
-    let selectedAirlineId = flight.airline_id;
-    let selectedCityId = flight.origin_city_id;
-    let selectedAirline = airlines.find(
-        (airline) => airline.id == selectedAirlineId
-    );
-    cities = selectedAirline.cities.map((city) => [city.id, city.name]);
-    cities = formatCities(cities);
-    let destinationCities = cities.filter(city => city.id != selectedCityId);
-    
-    $(".origin-city").empty().select2({
-        data: cities
-    });
-    $(".destination-city").empty().select2({
-        data: destinationCities
-    });
-    $(".origin-city").prop("disabled", false);
-    $(".destination-city").prop("disabled", false);
 }
 
 function loadFlightSchedule(modal, flight){
