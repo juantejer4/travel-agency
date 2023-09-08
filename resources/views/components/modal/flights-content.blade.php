@@ -1,6 +1,6 @@
 <div class="flex flex-col flex-1 py-1.5">
     <label for="{{$mode}}-airline">Select an airline</label>
-    <select class="airlines" id="{{$mode}}-airlines" name="airlines" required><option></option></select>
+    <select class="airlines" id="{{$mode}}-airline" name="airlines" required><option></option></select>
 </div>
 
 <div class="flex flex-col flex-1 py-1.5">
