@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Flight;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -26,17 +28,27 @@ class FlightController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $attributes = $request->validate([
-            'airline_id' => ['required'],
-            'origin_city_id' => ['required'],
-            'destination_city_id' => ['required'],
+        $validator = Validator::make($request->all(), [
+            'airline_id' => ['required', 'exists:airlines,id'],
+            'origin_city_id' => ['required', 'exists:cities,id'],
+            'destination_city_id' => [
+                'required',
+                'exists:cities,id',
+                Rule::notIn([$request->origin_city_id])
+            ],
             'departure_time' => ['required'],
             'arrival_time' => ['required']
         ]);
-        $flights = Flight::create($attributes);
-
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        $flights = Flight::create($request->all());
+    
         return response()->json($flights);
     }
+
 
     public function update(Request $request, Flight $flight): JsonResponse
     {
