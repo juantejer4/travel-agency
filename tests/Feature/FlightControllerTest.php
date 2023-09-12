@@ -20,6 +20,14 @@ class FlightControllerTest extends TestCase
 
         Airline::factory()->create();
 
+        Flight::create([
+            'airline_id' => 1,
+            'origin_city_id' => 1,
+            'destination_city_id' => 2,
+            'departure_time' => '2023-05-05T14:30:00',
+            'arrival_time' => '2023-05-05T14:31:00',
+        ]);
+
         $this->json('GET', action([FlightController::class, 'getFlights']))
             ->assertSuccessful()
             ->assertJsonFragment([
