@@ -52,18 +52,27 @@ class FlightController extends Controller
 
     public function update(Request $request, Flight $flight): JsonResponse
     {
-        $attributes = $request->validate([
-            'airline_id' => ['required'],
-            'origin_city_id' => ['required'],
-            'destination_city_id' => ['required'],
-            'departure_time' => ['required'],
-            'arrival_time' => ['required']
+        $validator = Validator::make($request->all(), [
+            'airline_id' => ['required', 'exists:airlines,id'],
+            'origin_city_id' => ['required', 'exists:cities,id'],
+            'destination_city_id' => [
+                'required',
+                'exists:cities,id',
+                Rule::notIn([$request->origin_city_id])
+            ],
+            'departure_time' => ['required', 'date_format:Y-m-d\TH:i'],
+            'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
         ]);
 
-        $flight->update($attributes);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $flight->update($request->all());
 
         return response()->json($flight);
     }
+
 
     public function destroy(Flight $flight): JsonResponse
     {
