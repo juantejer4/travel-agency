@@ -36,8 +36,8 @@ class FlightController extends Controller
                 'exists:cities,id',
                 Rule::notIn([$request->origin_city_id])
             ],
-            'departure_time' => ['required'],
-            'arrival_time' => ['required']
+            'departure_time' => ['required', 'date_format:Y-m-d\TH:i'],
+            'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
         ]);
     
         if ($validator->fails()) {

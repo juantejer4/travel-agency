@@ -20,14 +20,6 @@ class FlightControllerTest extends TestCase
 
         Airline::factory()->create();
 
-        $flight = Flight::create([
-            'airline_id' => 1,
-            'origin_city_id' => 1,
-            'destination_city_id' => 2,
-            'departure_time' => '2023-05-05T14:30:00',
-            'arrival_time' => '2023-05-05T14:31:00',
-        ]);
-
         $this->json('GET', action([FlightController::class, 'getFlights']))
             ->assertSuccessful()
             ->assertJsonFragment([
@@ -49,8 +41,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => 1,
             'destination_city_id' => 2,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ];
 
         $this->json('POST', action([FlightController::class, 'store']), $flightData)
@@ -70,8 +62,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => 999,
             'destination_city_id' => 1,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors('origin_city_id');
@@ -80,8 +72,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => 1,
             'destination_city_id' => 999,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors('destination_city_id');
@@ -90,8 +82,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => -2,
             'destination_city_id' => 1,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors('origin_city_id');
@@ -100,8 +92,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => 1,
             'destination_city_id' => -2,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors('destination_city_id');
@@ -110,8 +102,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => 999,
             'destination_city_id' => 789,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors('origin_city_id')
@@ -128,8 +120,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => 1,
             'destination_city_id' => 1,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ];
 
         $this->json('POST', action([FlightController::class, 'store']), $flightData)
@@ -140,7 +132,7 @@ class FlightControllerTest extends TestCase
     }
 
     //** @test */
-    public function testCreateAFlightWitnInvalidAirline()
+    public function testCreateAFlightWithInvalidAirline()
     {
         $this->withoutExceptionHandling();
 
@@ -150,8 +142,8 @@ class FlightControllerTest extends TestCase
             'airline_id' => 1,
             'origin_city_id' => 999,
             'destination_city_id' => 1,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors('airline_id');
@@ -160,11 +152,29 @@ class FlightControllerTest extends TestCase
             'airline_id' => -31,
             'origin_city_id' => 999,
             'destination_city_id' => 1,
-            'departure_time' => '2023-09-11 11:18:27',
-            'arrival_time' => '2023-09-11 15:19:27'
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
         ])
             ->assertStatus(422)
             ->assertJsonValidationErrors('airline_id');
+    }
+
+    //** @test */
+    public function testCreateFlightWithDepartureTimeAfterArrivalTime()
+    {
+        $this->withoutExceptionHandling();
+
+        City::factory(2)->create();
+
+        $this->json('POST', action([FlightController::class, 'store']), [
+            'airline_id' => 1,
+            'origin_city_id' => 1,
+            'destination_city_id' => 2,
+            'departure_time' => '2023-09-11T19:18',
+            'arrival_time' => '2023-09-11T15:19'
+        ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('arrival_time');
     }
 
 }
