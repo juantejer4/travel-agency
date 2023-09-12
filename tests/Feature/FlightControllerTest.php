@@ -185,4 +185,29 @@ class FlightControllerTest extends TestCase
             ->assertJsonValidationErrors('arrival_time');
     }
 
+    /** @test */
+    public function testUpdateAFlightWithValidParameters()
+    {
+        $cities = City::factory(2)->create();
+        $airline = Airline::factory()->create();
+
+        foreach ($cities as $city) {
+            $airline->cities()->attach($city->id);
+        }
+
+        $flightData = [
+            'airline_id' => 1,
+            'origin_city_id' => 1,
+            'destination_city_id' => 2,
+            'departure_time' => '2023-09-11T11:18',
+            'arrival_time' => '2023-09-11T15:19'
+        ];
+
+        $flight = Flight::factory()->create($flightData);
+
+        $this->json('PUT', action([FlightController::class, 'update'], ['flight' => $flight]), $flightData)
+            ->assertStatus(200)
+            ->assertJson($flightData);
+    }
+
 }
