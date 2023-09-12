@@ -28,45 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document
         .getElementById("create-form")
         .addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            let airline = createModal.querySelector(".airlines");
-            let origin = createModal.querySelector(".origin-city");
-            let destination = createModal.querySelector(".destination-city");
-            let departure = createModal.querySelector(".departure-time");
-            let arrival = createModal.querySelector(".arrival-time");
-
-            const data = {
-                airline_id: airline.options[airline.selectedIndex].value,
-                origin_city_id: origin.options[origin.selectedIndex].value,
-                destination_city_id: destination.options[destination.selectedIndex].value,
-                departure_time: departure.value,
-                arrival_time: arrival.value,
-            };
-
-            fetch("api/flights", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return response.json().then((errorJson) => {
-                            throw new Error(errorJson.message);
-                        });
-                    }
-                })
-                .then((data) => {
-                    showFlights();
-                    successToast.classList.remove("invisible");
-                    createModal.classList.add("invisible");
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            handleFormSubmit(event, "api/flights", "POST", createModal);
         });
 
     document
@@ -113,45 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document
         .getElementById("edit-form")
         .addEventListener("submit", function (event) {
-            event.preventDefault();
             let id = editModal.querySelector("#id").value;
-            let airline = editModal.querySelector(".airlines");
-            let origin = editModal.querySelector(".origin-city");
-            let destination = editModal.querySelector(".destination-city");
-            let departure = editModal.querySelector(".departure-time");
-            let arrival = editModal.querySelector(".arrival-time");
-
-            const data = {
-                airline_id: airline.options[airline.selectedIndex].value,
-                origin_city_id: origin.options[origin.selectedIndex].value,
-                destination_city_id:
-                    destination.options[destination.selectedIndex].value,
-                departure_time: departure.value,
-                arrival_time: arrival.value,
-            };
-
-            fetch(`api/flights/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        return response.json().then((errorJson) => {
-                            throw new Error(errorJson.message);
-                        });
-                    }
-                })
-                .then((data) => {
-                    showFlights();
-                    editModal.classList.add("invisible");
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            handleFormSubmit(event, `api/flights/${id}`, "PUT", editModal);
         });
 
         const closeButton = document.querySelector(
@@ -174,7 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
             let id = deleteModal.dataset.id;
             axios
                 .delete(`api/flights/${id}`, {
-                    data: { id: id },
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -270,7 +194,7 @@ $(document).ready(async function() {
     await getAirlines();
 
     $('.airlines').select2({
-        data: formatAirlines(airlines),
+        data: formatAirlinesForSelect(airlines),
         placeholder: 'Airline',
         width: '100%'
     });
@@ -352,7 +276,7 @@ async function getAirlines() {
     }
 }
 
-function formatAirlines(input) {
+function formatAirlinesForSelect(input) {
     var output = [];
     for (var i = 0; i < input.length; i++) {
         var item = input[i];
@@ -391,4 +315,48 @@ function loadFlightSchedule(modal, flight){
     modal.querySelector('.arrival-time').min = editModal.querySelector('.departure-time').value;
     modal.querySelector(".arrival-time").value = flight.arrival_time.slice(0, -3);
     modal.querySelector(".arrival-time").disabled = false;
+}
+
+function handleFormSubmit(event, url, method, modal) {
+    event.preventDefault();
+
+    let airline = modal.querySelector(".airlines");
+    let origin = modal.querySelector(".origin-city");
+    let destination = modal.querySelector(".destination-city");
+    let departure = modal.querySelector(".departure-time");
+    let arrival = modal.querySelector(".arrival-time");
+
+    const data = {
+        airline_id: airline.options[airline.selectedIndex].value,
+        origin_city_id: origin.options[origin.selectedIndex].value,
+        destination_city_id: destination.options[destination.selectedIndex].value,
+        departure_time: departure.value,
+        arrival_time: arrival.value,
+    };
+
+    fetch(url, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((errorJson) => {
+                    throw new Error(errorJson.message);
+                });
+            }
+        })
+        .then((data) => {
+            showFlights();
+            if (method === "POST") {
+                successToast.classList.remove("invisible");
+            }
+            modal.classList.add("invisible");
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }

@@ -74,8 +74,4 @@ class AirlineController extends Controller
         $airline->delete();
         return response()->json(['success' => 'Airline deleted']);
     }
-
-    public function getAirlineById(Airline $airline) : JsonResponse {
-        return response()->json($airline);
-    }
 }

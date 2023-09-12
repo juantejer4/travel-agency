@@ -28,23 +28,15 @@ class FlightController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'airline_id' => ['required', 'exists:airlines,id'],
             'origin_city_id' => ['required', 'exists:cities,id'],
-            'destination_city_id' => [
-                'required',
-                'exists:cities,id',
-                Rule::notIn([$request->origin_city_id])
-            ],
+            'destination_city_id' => ['required','exists:cities,id','different:origin_city_id'],
             'departure_time' => ['required', 'date_format:Y-m-d\TH:i'],
             'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
         ]);
     
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-    
-        $flights = Flight::create($request->all());
+        $flights = Flight::create($validatedData);
     
         return response()->json($flights);
     }
@@ -52,23 +44,15 @@ class FlightController extends Controller
 
     public function update(Request $request, Flight $flight): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'airline_id' => ['required', 'exists:airlines,id'],
             'origin_city_id' => ['required', 'exists:cities,id'],
-            'destination_city_id' => [
-                'required',
-                'exists:cities,id',
-                Rule::notIn([$request->origin_city_id])
-            ],
+            'destination_city_id' => ['required','exists:cities,id','different:origin_city_id'],
             'departure_time' => ['required', 'date_format:Y-m-d\TH:i'],
             'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $flight->update($request->all());
+        $flight->update($validatedData);
 
         return response()->json($flight);
     }

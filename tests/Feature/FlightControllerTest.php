@@ -138,8 +138,6 @@ class FlightControllerTest extends TestCase
     //** @test */
     public function testCreateAFlightWithInvalidCityId()
     {
-        $this->withoutExceptionHandling();
-
         City::factory()->create();
         Airline::factory()->create();
 
@@ -196,7 +194,7 @@ class FlightControllerTest extends TestCase
     }
 
     //** @test */
-    public function testCreatAFlightWithSameOriginAndDestination()
+    public function testCreateAFlightWithSameOriginAndDestination()
     {
         City::factory(2)->create();
         Airline::factory()->create();
@@ -211,16 +209,12 @@ class FlightControllerTest extends TestCase
 
         $this->json('POST', action([FlightController::class, 'store']), $flightData)
             ->assertStatus(422)
-            ->assertJsonValidationErrors([
-                'destination_city_id' => 'The selected destination city id is invalid.'
-            ]);
+            ->assertJsonValidationErrors('destination_city_id');
     }
 
     //** @test */
     public function testCreateAFlightWithInvalidAirline()
     {
-        $this->withoutExceptionHandling();
-
         City::factory(2)->create();
 
         $this->json('POST', action([FlightController::class, 'store']), [
@@ -247,8 +241,6 @@ class FlightControllerTest extends TestCase
     //** @test */
     public function testCreateFlightWithDepartureTimeAfterArrivalTime()
     {
-        $this->withoutExceptionHandling();
-
         City::factory(2)->create();
 
         $this->json('POST', action([FlightController::class, 'store']), [
@@ -290,8 +282,7 @@ class FlightControllerTest extends TestCase
     /** @test */
     public function testUpdateAFlightWithInvalidCityId()
     {
-        $this->withoutExceptionHandling();
-
+        
         $cities = City::factory(2)->create();
         $airline = Airline::factory()->create();
 
