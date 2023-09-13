@@ -27,17 +27,12 @@ class CityController
     }
 
     public function getCities(): JsonResponse
-{
-    $cities = City::paginate();
+    {
+        $cities = City::withCount(['arrivingFlights', 'departingFlights'])->paginate();
 
-    foreach ($cities as $city) {
-        $city->departingFlights = Flight::where('origin_city_id', $city->id)->count();
-        $city->arrivingFlights = Flight::where('destination_city_id', $city->id)->count();
+        $response['data'] = $cities;
+        return response()->json($response);
     }
-
-    $response['data'] = $cities;
-    return response()->json($response);
-}
 
 
     public function update(Request $request, City $city): JsonResponse

@@ -43,12 +43,8 @@ class AirlineController extends Controller
     public function getAirlines(Request $request): JsonResponse
     {
         $response = [];
-        $airlines = Airline::with('cities')->paginate(intval($request->get('per_page', 15)));
-
-        foreach ($airlines as $airline) {
-            $airline->flights = Flight::where('airline_id', $airline->id)->count();
-        }
-
+        $airlines = Airline::with(['cities'])->withCount('incomingFlights')->paginate(intval($request->get('per_page', 15)));
+        
         $response['data'] = $airlines;
         return response()->json($response);
     }
