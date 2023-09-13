@@ -1,4 +1,4 @@
-const sections = ["cities", "airlines"];
+const sections = ["cities", "airlines", "flights"];
 
 sections.forEach(section => {
     if (window.location.href.includes(`/${section}`)) {

@@ -39,10 +39,10 @@ class AirlineController extends Controller
         return response()->json($airline);
     }
 
-    public function getAirlines(): JsonResponse
+    public function getAirlines(Request $request): JsonResponse
     {
         $response = [];
-        $airlines = Airline::with('cities')->paginate();
+        $airlines = Airline::with('cities')->paginate(intval($request->get('per_page', 15)));
         $response['data'] = $airlines;
         return response()->json($response);
     }
@@ -68,7 +68,6 @@ class AirlineController extends Controller
 
         return response()->json(['success' => 'City updated']);
     }
-
 
     public function destroy(Airline $airline): JsonResponse
     {

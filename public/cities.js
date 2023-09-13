@@ -1,4 +1,4 @@
-$("#add-city-button").click(function () {
+$("#create-city-button").click(function () {
     show("#add-city-form");
 });
 $("#cancel-button").click(function () {
