@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -26,11 +27,18 @@ class CityController
     }
 
     public function getCities(): JsonResponse
-    {
-        $cities = City::paginate();
-        $response['data'] = $cities;
-        return response()->json($response);
+{
+    $cities = City::paginate();
+
+    foreach ($cities as $city) {
+        $city->departingFlights = Flight::where('origin_city_id', $city->id)->count();
+        $city->arrivingFlights = Flight::where('destination_city_id', $city->id)->count();
     }
+
+    $response['data'] = $cities;
+    return response()->json($response);
+}
+
 
     public function update(Request $request, City $city): JsonResponse
     {
