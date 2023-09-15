@@ -7,7 +7,6 @@ var airlines;
 var cities;
 
 document.addEventListener("DOMContentLoaded", function () {
-    showFlights();
 
     let date = new Date();
     let localOffset = date.getTimezoneOffset() * 60000;

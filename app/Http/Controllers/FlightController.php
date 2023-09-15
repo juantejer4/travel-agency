@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Flight;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class FlightController extends Controller
@@ -23,8 +20,11 @@ class FlightController extends Controller
     {
         $flights = Flight::with('origin','destination','airline')->paginate();
         $response['data'] = $flights;
+        $response['links'] = strval($flights->links());
         return response()->json($response);
     }
+    
+
 
     public function store(Request $request): JsonResponse
     {
