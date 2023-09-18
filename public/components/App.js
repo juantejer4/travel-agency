@@ -22,33 +22,33 @@ export default {
         }
     },
     created() {
-        this.fetchFlights('/api/flights');
+        this.fetchFlights('/api/flights', 'id');
     },
     methods: {
-        fetchFlights(url) {
-            axios.get(url)
+        fetchFlights(url, sort) {
+            axios.get(url, { params: { sort } })
                 .then(response => {
-                    console.log(response.data);
                     this.links = response.data.links;
                     this.flights = response.data.data.data;
                 })
                 .catch(error => console.error(error));
         },
-        sortFlights() {
-            this.flights.sort((a, b) => {
-                if (this.sortAscending) {
-                    return new Date(a.departure_time) - new Date(b.departure_time);
-                } else {
-                    return new Date(b.departure_time) - new Date(a.departure_time);
-                }
-            });
-            this.sortAscending = !this.sortAscending;
-        }
+        sortFlights(sortType) {
+            let sort;
+            if (sortType === 'ById') { 
+                sort = 'id';
+            } else if (sortType === 'DescendingByDepartureTime') { 
+                sort = 'departure_time_desc';
+            } else { 
+                sort = 'departure_time_asc';
+            }
+            this.fetchFlights('/api/flights', sort);
+        }        
     },
     template: `
         <date-picker/>
         <flight-table>
-            <table-head :columns="['Id', 'Airline', 'Origin', 'Destination', 'Departure', 'Arrival']" @sort-flights="sortFlights"/>
+            <table-head @sort-flights="sortFlights" :columns="['Id', 'Airline', 'Origin', 'Destination', 'Departure', 'Arrival']"/>
             <table-body>
             <template v-for="flight in flights" :key="flight.id">
                 <table-row :flight="flight"/>

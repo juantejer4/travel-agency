@@ -16,13 +16,26 @@ class FlightController extends Controller
         ]);
     }
 
-    public function getFlights(): JsonResponse
+    public function getFlights(Request $request): JsonResponse
     {
-        $flights = Flight::with('origin','destination','airline')->paginate();
+        $query = Flight::with('origin', 'destination', 'airline');
+
+        $sort = $request->query('sort');
+
+        if ($sort === 'id') {
+            $query->orderBy('id');
+        } elseif ($sort === 'departure_time_asc') {
+            $query->orderBy('departure_time');
+        } elseif ($sort === 'departure_time_desc') {
+            $query->orderByDesc('departure_time');
+        }
+
+        $flights = $query->paginate();
         $response['data'] = $flights;
         $response['links'] = strval($flights->links());
         return response()->json($response);
     }
+
     
 
 
