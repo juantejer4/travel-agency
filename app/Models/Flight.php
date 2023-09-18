@@ -13,21 +13,6 @@ class Flight extends Model
     protected $guarded = [];
     public $timestamps = false;
 
-    public function scopeOrderById($query)
-    {
-        return $query->orderBy('id');
-    }
-
-    public function scopeOrderByDepartureTimeAsc($query)
-    {
-        return $query->orderBy('departure_time');
-    }
-
-    public function scopeOrderByDepartureTimeDesc($query)
-    {
-        return $query->orderByDesc('departure_time');
-    }
-
     public function origin() : BelongsTo
     {
         return $this->belongsTo(City::class, 'origin_city_id');

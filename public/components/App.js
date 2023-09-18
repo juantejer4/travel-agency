@@ -18,7 +18,8 @@ export default {
         return {
             flights: [],
             links: [],
-            sortAscending: true
+            startDate: null,
+            endDate: null
         }
     },
     created() {
@@ -26,7 +27,7 @@ export default {
     },
     methods: {
         fetchFlights(url, sort) {
-            axios.get(url, { params: { sort } })
+            axios.get(url, { params: { sort, start_date: this.startDate, end_date: this.endDate } })
                 .then(response => {
                     this.links = response.data.links;
                     this.flights = response.data.data.data;
@@ -43,10 +44,15 @@ export default {
                 sort = 'departure_time_asc';
             }
             this.fetchFlights('/api/flights', sort);
-        }        
+        },
+        updateDates(dates) {
+            this.startDate = dates.startDate;
+            this.endDate = dates.endDate;
+            this.fetchFlights('/api/flights', 'id');
+        }
     },
     template: `
-        <date-picker/>
+        <date-picker @date-changed="updateDates"/>
         <flight-table>
             <table-head @sort-flights="sortFlights" :columns="['Id', 'Airline', 'Origin', 'Destination', 'Departure', 'Arrival']"/>
             <table-body>

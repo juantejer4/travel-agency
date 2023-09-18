@@ -17,24 +17,36 @@ class FlightController extends Controller
     }
 
     public function getFlights(Request $request): JsonResponse
-    {
-        $query = Flight::with('origin', 'destination', 'airline');
+{
+    $query = Flight::with('origin', 'destination', 'airline');
 
-        $sort = $request->query('sort');
+    $sort = $request->query('sort');
+    $startDate = $request->query('start_date');
+    $endDate = $request->query('end_date');
 
-        if ($sort === 'id') {
-            $query->orderBy('id');
-        } elseif ($sort === 'departure_time_asc') {
-            $query->orderBy('departure_time');
-        } elseif ($sort === 'departure_time_desc') {
-            $query->orderByDesc('departure_time');
-        }
-
-        $flights = $query->paginate();
-        $response['data'] = $flights;
-        $response['links'] = strval($flights->links());
-        return response()->json($response);
+    if ($sort === 'id') {
+        $query->orderBy('id');
+    } elseif ($sort === 'departure_time_asc') {
+        $query->orderBy('departure_time');
+    } elseif ($sort === 'departure_time_desc') {
+        $query->orderByDesc('departure_time');
     }
+
+    if ($startDate) {
+        $query->where('departure_time', '>=', $startDate);
+    }
+
+    if ($endDate) {
+        $query->where('departure_time', '<=', $endDate);
+    }
+
+    $flights = $query->paginate();
+    $response['data'] = $flights;
+    $response['links'] = strval($flights->links());
+    
+    return response()->json($response);
+}
+
 
     
 
