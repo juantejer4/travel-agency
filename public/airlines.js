@@ -179,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log(data);
                     errorMessage.classList.add("invisible");
                     editModal.classList.add("invisible");
 
