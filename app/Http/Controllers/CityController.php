@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpsertCityRequest;
 use App\Models\City;
+use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
