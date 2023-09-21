@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AirlineRequest;
 use App\Models\Airline;
 use App\Models\City;
-use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AirlineController extends Controller
@@ -20,13 +19,9 @@ class AirlineController extends Controller
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(AirlineRequest $request): JsonResponse
     {
-        $attributes = $request->validate([
-            'name' => ['required', Rule::unique('airlines')],
-            'description' => ['nullable'],
-            'cities' => ['array']
-        ]);
+        $attributes = $request->validated();
         $airline = Airline::create([
             'name' => $attributes['name'],
             'description' => $attributes['description']
@@ -50,13 +45,9 @@ class AirlineController extends Controller
     }
 
 
-    public function update(Request $request, Airline $airline): JsonResponse
+    public function update(AirlineRequest $request, Airline $airline): JsonResponse
     {
-        $attributes = $request->validate([
-            'name' => ['required', Rule::unique('airlines')->ignore($airline->id)],
-            'description' => ['nullable'],
-            'cities' => ['array']
-        ]);
+        $attributes = $request->validated();
 
         $airline->update([
             'name' => $attributes['name'],
