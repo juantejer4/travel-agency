@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Airline;
 use App\Models\City;
+use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -42,10 +43,12 @@ class AirlineController extends Controller
     public function getAirlines(Request $request): JsonResponse
     {
         $response = [];
-        $airlines = Airline::with('cities')->paginate(intval($request->get('per_page', 15)));
+        $airlines = Airline::with(['cities'])->withCount('incomingFlights')->paginate(intval($request->get('per_page', 15)));
+        
         $response['data'] = $airlines;
         return response()->json($response);
     }
+
 
     public function update(Request $request, Airline $airline): JsonResponse
     {

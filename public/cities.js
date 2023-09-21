@@ -23,7 +23,6 @@ $(document).ready(function () {
         processData: false,
         contentType: false,
         success: (cities) => {
-            console.log(`api/cities${location.search}`);
             $(".dynamic-tbody").html(generateCityTableRows(cities.data));
         },
         error: function (data) {
@@ -148,8 +147,8 @@ function generateCityRow(city) {
           <tr>
               <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">${city.id}</td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${city.name}</td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> - </td>
-              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> - </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${city.arriving_flights_count}</td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${city.departing_flights_count}</td>
               <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                   <button type="button" data-id="${city.id}"  class="edit text-indigo-600 hover:text-indigo-900">Edit</button>
               </td>

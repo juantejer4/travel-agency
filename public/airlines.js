@@ -179,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log(data);
                     errorMessage.classList.add("invisible");
                     editModal.classList.add("invisible");
 
@@ -212,7 +211,7 @@ function generateAirlineRow(airline) {
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${
                     airline.description ? airline.description : "-"
                 }</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> - </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${airline.incoming_flights_count}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                     <button type="button" data-id="${
                         airline.id

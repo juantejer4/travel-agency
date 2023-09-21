@@ -1,21 +1,23 @@
 const deleteModal = document.querySelector(".relative.z-10");
 const createModal = document.querySelector("#create-modal");
 const editModal = document.querySelector("#edit-modal");
-const successToast = document.querySelector('#toast');
+const successToast = document.querySelector("#toast");
 
 var airlines;
 var cities;
 
 document.addEventListener("DOMContentLoaded", function () {
-    showFlights();
-
     let date = new Date();
     let localOffset = date.getTimezoneOffset() * 60000;
     let localISOTime = new Date(date.getTime() - localOffset).toISOString();
 
-    createModal.querySelector('.departure-time').min = localISOTime.slice(0, 16);
+    createModal.querySelector(".departure-time").min = localISOTime.slice(
+        0,
+        16
+    );
 
-    createModal.querySelector('.arrival-time').min = createModal.querySelector('.departure-time').value;
+    createModal.querySelector(".arrival-time").min =
+        createModal.querySelector(".departure-time").value;
 
     document
         .getElementById("open-create-modal-button")
@@ -48,25 +50,29 @@ document.addEventListener("DOMContentLoaded", function () {
             successToast.classList.add("invisible");
         });
 
-
     document.addEventListener("click", function (event) {
         if (event.target && event.target.matches("button.edit")) {
             let id = event.target.dataset.id;
             let flight = JSON.parse(
                 document
-                .getElementById(`flight-${id}`)
-                .getAttribute("data-flight")
-                );
-            console.log(flight);
+                    .getElementById(`flight-${id}`)
+                    .getAttribute("data-flight")
+            );
             editModal.classList.remove("invisible");
             editModal.querySelector("#id").value = id;
             if (editModal.querySelector(".airlines").options[0].value == "") {
                 editModal.querySelector(".airlines").options[0].remove();
             }
-            $(editModal.querySelector(".airlines")).val(flight.airline_id).trigger('change');
-            
-            $(editModal.querySelector(".origin-city")).val(flight.origin_city_id).trigger('change');
-            $(editModal.querySelector(".destination-city")).val(flight.destination_city_id).trigger('change');
+            $(editModal.querySelector(".airlines"))
+                .val(flight.airline_id)
+                .trigger("change");
+
+            $(editModal.querySelector(".origin-city"))
+                .val(flight.origin_city_id)
+                .trigger("change");
+            $(editModal.querySelector(".destination-city"))
+                .val(flight.destination_city_id)
+                .trigger("change");
             loadFlightSchedule(editModal, flight);
             editModal.querySelector(".arrival-time").disabled = false;
         }
@@ -79,42 +85,42 @@ document.addEventListener("DOMContentLoaded", function () {
             handleFormSubmit(event, `api/flights/${id}`, "PUT", editModal);
         });
 
-        const closeButton = document.querySelector(
-            ".absolute.right-0.top-0.hidden.pr-4.pt-4.sm\\:block button"
-        );
-        const cancelButton = document.querySelector("#cancel-flight-deletion");
-        const deleteButton = document.querySelector("#delete-flight");
+    const closeButton = document.querySelector(
+        ".absolute.right-0.top-0.hidden.pr-4.pt-4.sm\\:block button"
+    );
+    const cancelButton = document.querySelector("#cancel-flight-deletion");
+    const deleteButton = document.querySelector("#delete-flight");
 
-        closeButton.addEventListener("click", () => {
-            deleteModal.classList.add("hidden");
-            deleteModal.classList.remove("block");
-        });
+    closeButton.addEventListener("click", () => {
+        deleteModal.classList.add("hidden");
+        deleteModal.classList.remove("block");
+    });
 
-        cancelButton.addEventListener("click", () => {
-            deleteModal.classList.add("hidden");
-            deleteModal.classList.remove("block");
-        });
+    cancelButton.addEventListener("click", () => {
+        deleteModal.classList.add("hidden");
+        deleteModal.classList.remove("block");
+    });
 
-        deleteButton.addEventListener("click", () => {
-            let id = deleteModal.dataset.id;
-            axios
-                .delete(`api/flights/${id}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                .then((response) => {
-                    if (response.status !== 200) {
-                        throw new Error(
-                            `Network response was not ok: ${response.status}`
-                        );
-                    }
-                    showFlights();
-                    return response.data;
-                });
-            deleteModal.classList.add("hidden");
-            deleteModal.classList.remove("block");
-        });
+    deleteButton.addEventListener("click", () => {
+        let id = deleteModal.dataset.id;
+        axios
+            .delete(`api/flights/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error(
+                        `Network response was not ok: ${response.status}`
+                    );
+                }
+                showFlights();
+                return response.data;
+            });
+        deleteModal.classList.add("hidden");
+        deleteModal.classList.remove("block");
+    });
 });
 
 document.addEventListener("click", function (event) {
@@ -173,15 +179,17 @@ function showFlights() {
         .getAttribute("content");
     try {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `api/flights${location.search}`);
-        xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-        xhr.onload = function() {
+        xhr.open("GET", `api/flights${location.search}`);
+        xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
+        xhr.onload = function () {
             if (xhr.status === 200) {
                 const flights = JSON.parse(xhr.responseText).data;
                 const rows = generateFlightsTableRows(flights);
                 document.querySelector(".dynamic-tbody").innerHTML = rows;
             } else {
-                console.log('Request failed.  Returned status of ' + xhr.status);
+                console.log(
+                    "Request failed.  Returned status of " + xhr.status
+                );
             }
         };
         xhr.send();
@@ -190,69 +198,73 @@ function showFlights() {
     }
 }
 
-$(document).ready(async function() {
+$(document).ready(async function () {
     await getAirlines();
 
-    $('.airlines').select2({
+    $(".airlines").select2({
         data: formatAirlinesForSelect(airlines),
-        placeholder: 'Airline',
-        width: '100%'
+        placeholder: "Airline",
+        width: "100%",
     });
-    $('.origin-city').select2({
-        placeholder: 'Origin',
-        width: '100%',
-        disabled: 'true'
+    $(".origin-city").select2({
+        placeholder: "Origin",
+        width: "100%",
+        disabled: "true",
     });
-    $('.destination-city').select2({
-        placeholder: 'Destination',
-        width: '100%',
-        disabled: 'true'
+    $(".destination-city").select2({
+        placeholder: "Destination",
+        width: "100%",
+        disabled: "true",
     });
 });
 
-$(".airlines").on("change", function() {
+$(".airlines").on("change", function () {
     let selectedAirlineId = $(this).val();
-    if(selectedAirlineId != ""){
-        let selectedAirline = airlines.find(airline => airline.id == selectedAirlineId);
-        cities = selectedAirline.cities.map(city => [city.id, city.name]);
+    if (selectedAirlineId != "") {
+        let selectedAirline = airlines.find(
+            (airline) => airline.id == selectedAirlineId
+        );
+        cities = selectedAirline.cities.map((city) => [city.id, city.name]);
         cities = formatCities(cities);
-    
-        $('.origin-city').empty().append('<option></option>').select2({
+
+        $(".origin-city").empty().append("<option></option>").select2({
             data: cities,
-            placeholder: 'Origin'
+            placeholder: "Origin",
         });
-        $('.destination-city').empty().append('<option></option>').select2({
-            placeholder: 'Destination'
+        $(".destination-city").empty().append("<option></option>").select2({
+            placeholder: "Destination",
         });
-    
+
         $(".origin-city").prop("disabled", false);
         $(".destination-city").prop("disabled", true);
     }
 });
 
-$('.origin-city').on('change', function() {
+$(".origin-city").on("change", function () {
     let selectedCityId = $(this).val();
     if (cities != undefined) {
-        let destinationCities = cities.filter(city => city.id != selectedCityId);
-        $('.destination-city').empty().append('<option></option>').select2({
+        let destinationCities = cities.filter(
+            (city) => city.id != selectedCityId
+        );
+        $(".destination-city").empty().append("<option></option>").select2({
             data: destinationCities,
-            placeholder: "Destination"
-        })
+            placeholder: "Destination",
+        });
         $(".destination-city").prop("disabled", false);
     }
 });
 
-$('.departure-time').on('change', function() {
-    $('.arrival-time').prop('disabled', false);
-    $('.arrival-time').prop('min', $(this).val());
+$(".departure-time").on("change", function () {
+    $(".arrival-time").prop("disabled", false);
+    $(".arrival-time").prop("min", $(this).val());
 });
 
-$('.arrival-time').on('change', function() {
+$(".arrival-time").on("change", function () {
     let arrivalTime = new Date($(this).val());
-    let departureTime = new Date($('.departure-time').val());
+    let departureTime = new Date($(".departure-time").val());
 
-    if(departureTime > arrivalTime){
-        $(this).val('');
+    if (departureTime > arrivalTime) {
+        $(this).val("");
     }
 });
 
@@ -268,9 +280,8 @@ function formatDate(dateString) {
 
 async function getAirlines() {
     try {
-        const response = await axios.get('api/airlines?per_page=1000');
+        const response = await axios.get("api/airlines?per_page=1000");
         airlines = response.data.data.data;
-
     } catch (error) {
         console.error(error);
     }
@@ -282,7 +293,7 @@ function formatAirlinesForSelect(input) {
         var item = input[i];
         output.push({
             id: item.id,
-            text: item.name
+            text: item.name,
         });
     }
     return output;
@@ -293,7 +304,7 @@ function formatCities(input) {
     for (var i = 0; i < input.length; i++) {
         output.push({
             id: input[i][0],
-            text: input[i][1]
+            text: input[i][1],
         });
     }
     return output;
@@ -309,11 +320,20 @@ function cleanModal(modal) {
     $(".arrival-time", modal).val("");
 }
 
-function loadFlightSchedule(modal, flight){
-    modal.querySelector('.departure-time').min = new Date().toISOString().slice(0, 16);
-    modal.querySelector(".departure-time").value = flight.departure_time.slice(0, -3);
-    modal.querySelector('.arrival-time').min = editModal.querySelector('.departure-time').value;
-    modal.querySelector(".arrival-time").value = flight.arrival_time.slice(0, -3);
+function loadFlightSchedule(modal, flight) {
+    modal.querySelector(".departure-time").min = new Date()
+        .toISOString()
+        .slice(0, 16);
+    modal.querySelector(".departure-time").value = flight.departure_time.slice(
+        0,
+        -3
+    );
+    modal.querySelector(".arrival-time").min =
+        editModal.querySelector(".departure-time").value;
+    modal.querySelector(".arrival-time").value = flight.arrival_time.slice(
+        0,
+        -3
+    );
     modal.querySelector(".arrival-time").disabled = false;
 }
 
@@ -329,7 +349,8 @@ function handleFormSubmit(event, url, method, modal) {
     const data = {
         airline_id: airline.options[airline.selectedIndex].value,
         origin_city_id: origin.options[origin.selectedIndex].value,
-        destination_city_id: destination.options[destination.selectedIndex].value,
+        destination_city_id:
+            destination.options[destination.selectedIndex].value,
         departure_time: departure.value,
         arrival_time: arrival.value,
     };
