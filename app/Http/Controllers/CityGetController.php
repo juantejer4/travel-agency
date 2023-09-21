@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
-class GetCitiesController extends Controller
+class CityGetController extends Controller
 {
     public function __invoke(): JsonResponse
     {

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
-class DestroyCityController extends Controller
+class CityDestroyController extends Controller
 {
     public function __invoke(City $city): JsonResponse
     {
