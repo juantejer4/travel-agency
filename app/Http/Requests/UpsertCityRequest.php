@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class AirlineRequest extends FormRequest
+class UpsertCityRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,9 +14,7 @@ class AirlineRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', Rule::unique('airlines')],
-            'description' => ['nullable'],
-            'cities' => ['array']
+            'name' => ['required', 'unique:cities']
         ];
     }
 }

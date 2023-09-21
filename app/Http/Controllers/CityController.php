@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CityRequest;
+use App\Http\Requests\UpsertCityRequest;
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -16,10 +16,9 @@ class CityController
         ]);
     }
 
-    public function store(CityRequest $request): JsonResponse
+    public function store(UpsertCityRequest $request): JsonResponse
     {
-        $attributes = $request->validated();
-        $city = City::create($attributes);
+        $city = City::create($request->validated());
         return response()->json($city);
     }
 
@@ -32,7 +31,7 @@ class CityController
     }
 
 
-    public function update(CityRequest $request, City $city): JsonResponse
+    public function update(UpsertCityRequest $request, City $city): JsonResponse
     {
         $city->update($request->validated());
         return response()->json(['success' => 'City updated']);

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FlightRequest extends FormRequest
+class UpsertFlightRequest extends FormRequest
 {
     public function authorize(): bool
     {
