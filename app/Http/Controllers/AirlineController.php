@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AirlineRequest;
 use App\Models\Airline;
 use App\Models\City;
+use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

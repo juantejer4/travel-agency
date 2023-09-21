@@ -45,7 +45,6 @@ class FlightController extends Controller
         return response()->json($response);
     }
 
-
     public function store(FlightRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
@@ -57,13 +56,7 @@ class FlightController extends Controller
 
     public function update(Request $request, Flight $flight): JsonResponse
     {
-        $validatedData = $request->validate([
-            'airline_id' => ['required', 'exists:airlines,id'],
-            'origin_city_id' => ['required', 'exists:cities,id'],
-            'destination_city_id' => ['required', 'exists:cities,id', 'different:origin_city_id'],
-            'departure_time' => ['required', 'date_format:Y-m-d\TH:i'],
-            'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
-        ]);
+        $validatedData = $request->validated();
 
         $flight->update($validatedData);
 

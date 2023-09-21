@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CityRequest;
 use App\Models\City;
+use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
@@ -30,7 +31,6 @@ class CityController
         $response['data'] = $cities;
         return response()->json($response);
     }
-
 
     public function update(CityRequest $request, City $city): JsonResponse
     {
