@@ -53,7 +53,7 @@ class FlightController extends Controller
         return response()->json($flights);
     }
 
-    public function update(Request $request, Flight $flight): JsonResponse
+    public function update(UpsertFlightRequest $request, Flight $flight): JsonResponse
     {
         $flight->update($request->validated());
         return response()->json($flight);

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpsertAirlineRequest;
+use App\Http\Requests\UpdateAirlineRequest;
+use App\Http\Requests\CreateAirlineRequest;
 use App\Models\Airline;
 use App\Models\City;
-use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -20,7 +20,7 @@ class AirlineController extends Controller
         ]);
     }
 
-    public function store(UpsertAirlineRequest $request): JsonResponse
+    public function store(CreateAirlineRequest $request): JsonResponse
     {
         $attributes = $request->validated();
         $airline = Airline::create([
@@ -46,7 +46,7 @@ class AirlineController extends Controller
     }
 
 
-    public function update(UpsertAirlineRequest $request, Airline $airline): JsonResponse
+    public function update(UpdateAirlineRequest $request, Airline $airline): JsonResponse
     {
         $attributes = $request->validated();
 
