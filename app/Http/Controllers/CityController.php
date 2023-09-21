@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpsertCityRequest;
 use App\Models\City;
 use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CityController
@@ -17,12 +17,9 @@ class CityController
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(UpsertCityRequest $request): JsonResponse
     {
-        $attributes = $request->validate([
-            'name' => ['required', 'unique:cities']
-        ]);
-        $city = City::create($attributes);
+        $city = City::create($request->validated());
         return response()->json($city);
     }
 
@@ -35,11 +32,9 @@ class CityController
     }
 
 
-    public function update(Request $request, City $city): JsonResponse
+    public function update(UpsertCityRequest $request, City $city): JsonResponse
     {
-        $city->update($request->validate([
-            'name' => ['required', 'unique:cities']
-        ]));
+        $city->update($request->validated());
         return response()->json(['success' => 'City updated']);
     }
 

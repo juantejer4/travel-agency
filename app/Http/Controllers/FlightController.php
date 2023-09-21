@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpsertFlightRequest;
 use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -45,37 +46,18 @@ class FlightController extends Controller
     }
 
 
-    public function store(Request $request): JsonResponse
+    public function store(UpsertFlightRequest $request): JsonResponse
     {
-        $validatedData = $request->validate([
-            'airline_id' => ['required', 'exists:airlines,id'],
-            'origin_city_id' => ['required', 'exists:cities,id'],
-            'destination_city_id' => ['required', 'exists:cities,id', 'different:origin_city_id'],
-            'departure_time' => ['required', 'date_format:Y-m-d\TH:i'],
-            'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
-        ]);
 
-        $flights = Flight::create($validatedData);
-
+        $flights = Flight::create($request->validated());
         return response()->json($flights);
     }
 
-
     public function update(Request $request, Flight $flight): JsonResponse
     {
-        $validatedData = $request->validate([
-            'airline_id' => ['required', 'exists:airlines,id'],
-            'origin_city_id' => ['required', 'exists:cities,id'],
-            'destination_city_id' => ['required', 'exists:cities,id', 'different:origin_city_id'],
-            'departure_time' => ['required', 'date_format:Y-m-d\TH:i'],
-            'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
-        ]);
-
-        $flight->update($validatedData);
-
+        $flight->update($request->validated());
         return response()->json($flight);
     }
-
 
     public function destroy(Flight $flight): JsonResponse
     {
