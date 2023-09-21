@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class AirlineIndexController
 {
-    public function index(): View
+    public function __invoke(): View
     {
         return view('airlines.show', [
             'links' => Airline::paginate()->links(),

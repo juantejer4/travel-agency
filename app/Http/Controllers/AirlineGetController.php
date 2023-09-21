@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AirlineGetController extends Controller
 {
-    public function getAirlines(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $response = [];
         $airlines = Airline::with(['cities'])->withCount('incomingFlights')->paginate(intval($request->get('per_page', 15)));

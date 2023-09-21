@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class AirlineUpdateController extends Controller
 {
-    public function update(UpdateAirlineRequest $request, Airline $airline): JsonResponse
+    public function __invoke(UpdateAirlineRequest $request, Airline $airline): JsonResponse
     {
         $attributes = $request->validated();
 

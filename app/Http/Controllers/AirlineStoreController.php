@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class AirlineStoreController
 {
-    public function store(CreateAirlineRequest $request): JsonResponse
+    public function __invoke(CreateAirlineRequest $request): JsonResponse
     {
         $attributes = $request->validated();
         $airline = Airline::create([
