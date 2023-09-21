@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\AirlineController;
-use App\Http\Controllers\CityController;
+use App\Http\Controllers\IndexCityController;
 use App\Http\Controllers\FlightController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/cities', [CityController::class, 'index']);
+Route::get('/cities', IndexCityController::class);
 
 Route::get('/airlines', [AirlineController::class, 'index']);
 

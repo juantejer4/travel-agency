@@ -1,15 +1,18 @@
 <?php
 
 use App\Http\Controllers\AirlineController;
-use App\Http\Controllers\CityController;
+use App\Http\Controllers\StoreCityController;
+use App\Http\Controllers\DestroyCityController;
+use App\Http\Controllers\UpdateCityController;
+use App\Http\Controllers\GetCitiesController;
 use App\Http\Controllers\FlightController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'cities', 'controller' => CityController::class], function () {
-    Route::post('/', 'store')->name('cities.store');
-    Route::delete('/{city}', 'destroy')->name('cities.destroy');
-    Route::put('/{city}', 'update')->name('cities.update');
-    Route::get('/', 'getCities');
+Route::group(['prefix' => 'cities'], function () {
+    Route::post('/', StoreCityController::class);
+    Route::delete('/{city}', DestroyCityController::class);
+    Route::put('/{city}', UpdateCityController::class);
+    Route::get('/', GetCitiesController::class);
 });
 
 Route::group(['prefix' => 'airlines', 'controller' => AirlineController::class], function () {
