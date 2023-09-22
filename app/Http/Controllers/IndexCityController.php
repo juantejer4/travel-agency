@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Flight;
+use App\Models\City;
 use Illuminate\Contracts\View\View;
 
-class FlightIndexController
+class IndexCityController
 {
     public function __invoke(): View
     {
-        return view('flights.show', [
-            'links' => Flight::paginate()->links()
+        return view('cities.show', [
+            'links' => City::paginate()->links()
         ]);
     }
 }

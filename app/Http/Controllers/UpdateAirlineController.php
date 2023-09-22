@@ -7,7 +7,7 @@ use App\Models\Airline;
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
-class AirlineUpdateController extends Controller
+class UpdateAirlineController extends Controller
 {
     public function __invoke(UpdateAirlineRequest $request, Airline $airline): JsonResponse
     {

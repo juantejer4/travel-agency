@@ -1,39 +1,39 @@
 <?php
 
-use App\Http\Controllers\CityStoreController;
-use App\Http\Controllers\CityDestroyController;
-use App\Http\Controllers\CityUpdateController;
-use App\Http\Controllers\CityGetController;
+use App\Http\Controllers\StoreCityController;
+use App\Http\Controllers\DeleteCityController;
+use App\Http\Controllers\UpdateCityController;
+use App\Http\Controllers\GetCityController;
 
-use App\Http\Controllers\AirlineStoreController;
-use App\Http\Controllers\AirlineDestroyController;
-use App\Http\Controllers\AirlineUpdateController;
-use App\Http\Controllers\AirlineGetController;
+use App\Http\Controllers\StoreAirlineController;
+use App\Http\Controllers\DeleteAirlineController;
+use App\Http\Controllers\UpdateAirlineController;
+use App\Http\Controllers\GetAirlineController;
 
-use App\Http\Controllers\FlightGetController;
-use App\Http\Controllers\FlightStoreController;
-use App\Http\Controllers\FlightUpdateController;
-use App\Http\Controllers\FlightDestroyController;
+use App\Http\Controllers\GetFlightController;
+use App\Http\Controllers\StoreFlightController;
+use App\Http\Controllers\UpdateFlightController;
+use App\Http\Controllers\DeleteFlightController;
 
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'cities'], function () {
-    Route::post('/', CityStoreController::class);
-    Route::delete('/{city}', CityDestroyController::class);
-    Route::put('/{city}', CityUpdateController::class);
-    Route::get('/', CityGetController::class);
+    Route::post('/', StoreCityController::class);
+    Route::delete('/{city}', DeleteCityController::class);
+    Route::put('/{city}', UpdateCityController::class);
+    Route::get('/', GetCityController::class);
 });
 
 Route::group(['prefix' => 'airlines'], function () {
-    Route::post('/', AirlineStoreController::class);
-    Route::delete('/{airline}', AirlineDestroyController::class);
-    Route::put('/{airline}', AirlineUpdateController::class);
-    Route::get('/', AirlineGetController::class);
+    Route::post('/', StoreAirlineController::class);
+    Route::delete('/{airline}', DeleteAirlineController::class);
+    Route::put('/{airline}', UpdateAirlineController::class);
+    Route::get('/', GetAirlineController::class);
 });
 
 Route::group(['prefix' => 'flights'], function () {
-    Route::get('/', FlightGetController::class);
-    Route::post('/', FlightStoreController::class);
-    Route::put('/{flight}', FlightUpdateController::class);
-    Route::delete('/{flight}', FlightDestroyController::class);
+    Route::get('/', GetFlightController::class);
+    Route::post('/', StoreFlightController::class);
+    Route::put('/{flight}', UpdateFlightController::class);
+    Route::delete('/{flight}', DeleteFlightController::class);
 });

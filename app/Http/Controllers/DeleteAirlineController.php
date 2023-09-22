@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Airline;
 use Illuminate\Http\JsonResponse;
 
-class AirlineDestroyController
+class DeleteAirlineController
 {
     public function __invoke(Airline $airline): JsonResponse
     {

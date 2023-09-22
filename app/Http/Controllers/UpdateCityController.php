@@ -6,7 +6,7 @@ use App\Http\Requests\UpsertCityRequest;
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
-class CityUpdateController
+class UpdateCityController
 {
     public function __invoke(UpsertCityRequest $request, City $city): JsonResponse
     {

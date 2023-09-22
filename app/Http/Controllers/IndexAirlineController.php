@@ -6,7 +6,7 @@ use App\Models\Airline;
 use App\Models\City;
 use Illuminate\View\View;
 
-class AirlineIndexController
+class IndexAirlineController
 {
     public function __invoke(): View
     {

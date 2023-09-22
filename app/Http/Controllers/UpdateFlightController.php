@@ -6,7 +6,7 @@ use App\Http\Requests\UpsertFlightRequest;
 use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 
-class FlightUpdateController
+class UpdateFlightController
 {
     public function __invoke(UpsertFlightRequest $request, Flight $flight): JsonResponse
     {
