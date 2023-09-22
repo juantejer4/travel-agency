@@ -1,13 +1,10 @@
 <?php
 
-use App\Http\Controllers\AirlineController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\FlightController;
+use App\Http\Controllers\Airline\IndexAirlineController;
+use App\Http\Controllers\City\IndexCityController;
+use App\Http\Controllers\Flight\IndexFlightController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/cities', [CityController::class, 'index']);
-
-Route::get('/airlines', [AirlineController::class, 'index']);
-
-Route::get('/flights', [FlightController::class, 'index']);
+Route::get('/cities', IndexCityController::class);
+Route::get('/airlines', IndexAirlineController::class);
+Route::get('/flights', IndexFlightController::class);
