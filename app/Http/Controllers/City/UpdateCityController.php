@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\City;
 
 use App\Http\Requests\UpsertCityRequest;
 use App\Models\City;

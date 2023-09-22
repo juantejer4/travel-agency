@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\City;
 
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
-class DeleteCityController extends Controller
+class DeleteCityController
 {
     public function __invoke(City $city): JsonResponse
     {

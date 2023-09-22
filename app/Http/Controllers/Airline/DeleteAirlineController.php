@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Airline;
 
 use App\Models\Airline;
 use Illuminate\Http\JsonResponse;

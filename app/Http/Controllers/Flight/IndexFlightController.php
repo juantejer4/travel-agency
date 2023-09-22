@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Flight;
 
 use App\Models\Flight;
 use Illuminate\Contracts\View\View;

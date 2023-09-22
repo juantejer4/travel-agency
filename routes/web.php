@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\IndexAirlineController;
-use App\Http\Controllers\IndexCityController;
-use App\Http\Controllers\IndexFlightController;
+use App\Http\Controllers\Airline\IndexAirlineController;
+use App\Http\Controllers\City\IndexCityController;
+use App\Http\Controllers\Flight\IndexFlightController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/cities', IndexCityController::class);

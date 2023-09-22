@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Airline;
 
 use App\Models\Airline;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class GetAirlineController extends Controller
+class GetAirlineController
 {
     public function __invoke(Request $request): JsonResponse
     {

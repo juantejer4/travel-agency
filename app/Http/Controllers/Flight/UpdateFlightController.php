@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Flight;
 
 use App\Http\Requests\UpsertFlightRequest;
 use App\Models\Flight;

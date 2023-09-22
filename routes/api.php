@@ -1,19 +1,19 @@
 <?php
 
-use App\Http\Controllers\StoreCityController;
-use App\Http\Controllers\DeleteCityController;
-use App\Http\Controllers\UpdateCityController;
-use App\Http\Controllers\GetCityController;
+use App\Http\Controllers\Airline\DeleteAirlineController;
+use App\Http\Controllers\Airline\GetAirlineController;
+use App\Http\Controllers\Airline\StoreAirlineController;
+use App\Http\Controllers\Airline\UpdateAirlineController;
 
-use App\Http\Controllers\StoreAirlineController;
-use App\Http\Controllers\DeleteAirlineController;
-use App\Http\Controllers\UpdateAirlineController;
-use App\Http\Controllers\GetAirlineController;
+use App\Http\Controllers\City\DeleteCityController;
+use App\Http\Controllers\City\GetCityController;
+use App\Http\Controllers\City\StoreCityController;
+use App\Http\Controllers\City\UpdateCityController;
 
-use App\Http\Controllers\GetFlightController;
-use App\Http\Controllers\StoreFlightController;
-use App\Http\Controllers\UpdateFlightController;
-use App\Http\Controllers\DeleteFlightController;
+use App\Http\Controllers\Flight\DeleteFlightController;
+use App\Http\Controllers\Flight\GetFlightController;
+use App\Http\Controllers\Flight\StoreFlightController;
+use App\Http\Controllers\Flight\UpdateFlightController;
 
 use Illuminate\Support\Facades\Route;
 

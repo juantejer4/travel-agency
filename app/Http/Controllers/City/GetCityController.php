@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\City;
 
 use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
-class GetCityController extends Controller
+class GetCityController
 {
     public function __invoke(): JsonResponse
     {
