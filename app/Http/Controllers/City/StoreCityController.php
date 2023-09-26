@@ -10,7 +10,8 @@ class StoreCityController
 {
     public function __invoke(UpsertCityRequest $request): JsonResponse
     {
-        $city = City::create($request->validated());
+        $cityData = $request->toDto();
+        $city = City::create(['name' => $cityData->name]);
         return response()->json($city);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\DataTransferObjects\FlightData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpsertFlightRequest extends FormRequest
@@ -21,4 +22,16 @@ class UpsertFlightRequest extends FormRequest
             'arrival_time' => ['required', 'date_format:Y-m-d\TH:i', 'after:departure_time']
         ];
     }
+
+    public function toDto() : FlightData
+    {
+        $airline = $this->input('airline_id');
+        $origin = $this->input('origin_city_id');
+        $destination = $this->input('destination_city_id');
+        $departureTime = $this->input('departure_time');
+        $arrivalTime = $this->input('arrival_time');
+
+        return new FlightData($airline, $origin, $destination, $departureTime, $arrivalTime);
+    }
+
 }

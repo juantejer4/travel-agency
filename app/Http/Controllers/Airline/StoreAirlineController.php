@@ -11,16 +11,13 @@ class StoreAirlineController
 {
     public function __invoke(CreateAirlineRequest $request): JsonResponse
     {
-        $attributes = $request->validated();
+        $airlineData = $request->toDto();
         $airline = Airline::create([
-            'name' => $attributes['name'],
-            'description' => $attributes['description']
+            'name' => $airlineData->name,
+            'description' => $airlineData->description
         ]);
-
-        if (isset($attributes['cities'])) {
-            $cities = City::whereIn('name', $attributes['cities'])->get();
-            $airline->cities()->attach($cities);
-        }
+        $cities = City::whereIn('name', $airlineData->cities)->get();
+        $airline->cities()->attach($cities);
 
         return response()->json($airline);
     }

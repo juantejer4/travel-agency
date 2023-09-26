@@ -10,7 +10,8 @@ class UpdateCityController
 {
     public function __invoke(UpsertCityRequest $request, City $city): JsonResponse
     {
-        $city->update($request->validated());
+        $cityData = $request->toDto();
+        $city->update(['name' => $cityData->name]);
         return response()->json(['success' => 'City updated']);
     }
 }

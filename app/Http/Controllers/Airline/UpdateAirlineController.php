@@ -11,19 +11,17 @@ class UpdateAirlineController
 {
     public function __invoke(UpdateAirlineRequest $request, Airline $airline): JsonResponse
     {
-        $attributes = $request->validated();
-
+        $airlineData = $request->toDto();
         $airline->update([
-            'name' => $attributes['name'],
-            'description' => $attributes['description']
+            'name' => $airlineData->name,
+            'description' => $airlineData->description
         ]);
 
-        $cities = [];
-        if (isset($attributes['cities'])) {
-            $cities = City::whereIn('name', $attributes['cities'])->get();
-        }
-        $airline->cities()->sync($cities);
+        $cityNames = $airlineData->cities;
+        $cityIds = City::whereIn('name', $cityNames)->pluck('id');
+        $airline->cities()->sync($cityIds);
 
         return response()->json(['success' => 'City updated']);
     }
+
 }

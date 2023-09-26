@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\DataTransferObjects\AirlineData;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,4 +21,13 @@ class UpdateAirlineRequest extends FormRequest
             'cities' => ['array']
         ];
     }
+    public function toDto(): AirlineData
+    {
+        $name = $this->input('name');
+        $description = $this->input('description');
+        $cities = $this->input('cities');
+
+        return new AirlineData($name, $description, $cities);
+    }
+
 }

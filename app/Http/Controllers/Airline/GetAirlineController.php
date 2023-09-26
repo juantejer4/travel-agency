@@ -12,7 +12,7 @@ class GetAirlineController
     {
         $response = [];
         $airlines = Airline::with(['cities'])->withCount('incomingFlights')->paginate(intval($request->get('per_page', 15)));
-        
+
         $response['data'] = $airlines;
         return response()->json($response);
     }
