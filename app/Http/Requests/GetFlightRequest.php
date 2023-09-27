@@ -25,10 +25,10 @@ class GetFlightRequest extends FormRequest
     public function toDto(): SortFlightData
     {
         return new SortFlightData(
-            $this->input('sort'),
-            $this->input('sortOrder'),
-            $this->input('start_date'),
-            $this->input('end_date')
+            sort: $this->input('sort'),
+            sortOrder: $this->input('sortOrder'),
+            startDate: $this->input('start_date'),
+            endDate: $this->input('end_date')
         );
     }
 

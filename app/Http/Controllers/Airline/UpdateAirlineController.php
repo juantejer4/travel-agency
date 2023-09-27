@@ -2,26 +2,17 @@
 
 namespace App\Http\Controllers\Airline;
 
+use App\Http\Actions\UpdateAirlineAction;
 use App\Http\Requests\UpdateAirlineRequest;
 use App\Models\Airline;
-use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
 class UpdateAirlineController
 {
-    public function __invoke(UpdateAirlineRequest $request, Airline $airline): JsonResponse
+    public function __invoke(UpdateAirlineRequest $request, Airline $airline, UpdateAirlineAction $action): JsonResponse
     {
         $airlineData = $request->toDto();
-        $airline->update([
-            'name' => $airlineData->name,
-            'description' => $airlineData->description
-        ]);
-
-        $cityNames = $airlineData->cities;
-        $cityIds = City::whereIn('name', $cityNames)->pluck('id');
-        $airline->cities()->sync($cityIds);
-
+        $action->execute($airlineData, $airline);
         return response()->json(['success' => 'City updated']);
     }
-
 }

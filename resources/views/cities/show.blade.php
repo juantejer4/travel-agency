@@ -29,7 +29,7 @@
           </table>
 
           <footer class="p-10">
-            {!! $links !!}
+              {!! $links !!}
           </footer>
 
         </div>

@@ -21,8 +21,10 @@ class UpsertCityRequest extends FormRequest
 
     public function toDto(): CityData
     {
-        $name = $this->input('name');
-        return new CityData($name);
+        return new CityData(
+            name: $this->input('name')
+        );
     }
+
 
 }
