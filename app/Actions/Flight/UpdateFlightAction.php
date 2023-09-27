@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Actions;
+namespace App\Actions\Flight;
 
-use App\Http\DataTransferObjects\FlightData;
+use App\DataTransferObjects\FlightData;
 use App\Models\Flight;
 
 class UpdateFlightAction
 {
-    public function execute(FlightData $flightData, Flight $flight)
+    public function execute(Flight $flight, FlightData $flightData)
     {
         return $flight->update([
             'airline_id' => $flightData->airline,

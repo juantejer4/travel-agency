@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Airline;
 
-use App\Http\Actions\StoreAirlineAction;
+use App\Actions\Airline\StoreAirlineAction;
 use App\Http\Requests\CreateAirlineRequest;
 use Illuminate\Http\JsonResponse;
 
 class StoreAirlineController
 {
-    public function __invoke(CreateAirlineRequest $request, StoreAirlineAction $action): JsonResponse
+    public function __invoke(CreateAirlineRequest $request, StoreAirlineAction $storeAirlineAction): JsonResponse
     {
         $airlineData = $request->toDto();
-        $airline = $action->execute($airlineData);
+        $airline = $storeAirlineAction->execute($airlineData);
         return response()->json($airline);
     }
 }

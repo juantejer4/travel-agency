@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Actions;
+namespace App\Actions\Flight;
 
 use App\Http\Requests\GetFlightRequest;
 use App\Models\Flight;

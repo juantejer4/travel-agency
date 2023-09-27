@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Actions;
+namespace App\Actions\Flight;
 
-use App\Http\DataTransferObjects\FlightData;
+use App\DataTransferObjects\FlightData;
 use App\Models\Flight;
 
 class StoreFlightAction

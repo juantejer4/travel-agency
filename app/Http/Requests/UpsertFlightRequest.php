@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\DataTransferObjects\FlightData;
+use App\DataTransferObjects\FlightData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpsertFlightRequest extends FormRequest

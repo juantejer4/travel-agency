@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Actions;
+namespace App\Actions\Airline;
 
-use App\Http\DataTransferObjects\AirlineData;
+use App\DataTransferObjects\AirlineData;
 use App\Models\Airline;
 use App\Models\City;
 

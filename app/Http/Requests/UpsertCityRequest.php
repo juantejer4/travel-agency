@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\DataTransferObjects\CityData;
+use App\DataTransferObjects\CityData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpsertCityRequest extends FormRequest

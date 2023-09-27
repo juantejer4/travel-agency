@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\DataTransferObjects;
+namespace App\DataTransferObjects;
 
 class CityData {
     public function __construct(public string $name)

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\DataTransferObjects\SortFlightData;
+use App\DataTransferObjects\SortFlightData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetFlightRequest extends FormRequest

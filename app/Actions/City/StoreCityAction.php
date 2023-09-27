@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Actions;
+namespace App\Actions\City;
 
-use App\Http\DataTransferObjects\CityData;
+use App\DataTransferObjects\CityData;
 use App\Models\City;
 
 class StoreCityAction
