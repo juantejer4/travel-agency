@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Flight;
 
+use App\Actions\Flight\UpdateFlightAction;
 use App\Http\Requests\UpsertFlightRequest;
 use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 
 class UpdateFlightController
 {
-    public function __invoke(UpsertFlightRequest $request, Flight $flight): JsonResponse
+    public function __invoke(UpsertFlightRequest $request, Flight $flight, UpdateFlightAction $updateFlightAction): JsonResponse
     {
-        $flight->update($request->validated());
-        return response()->json($flight);
+        $flightData = $request->toDto();
+        $updated = $updateFlightAction->execute($flight, $flightData);
+        return response()->json($updated);
     }
 }

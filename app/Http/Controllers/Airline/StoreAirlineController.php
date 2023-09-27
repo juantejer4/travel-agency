@@ -2,26 +2,16 @@
 
 namespace App\Http\Controllers\Airline;
 
+use App\Actions\Airline\StoreAirlineAction;
 use App\Http\Requests\CreateAirlineRequest;
-use App\Models\Airline;
-use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
 class StoreAirlineController
 {
-    public function __invoke(CreateAirlineRequest $request): JsonResponse
+    public function __invoke(CreateAirlineRequest $request, StoreAirlineAction $storeAirlineAction): JsonResponse
     {
-        $attributes = $request->validated();
-        $airline = Airline::create([
-            'name' => $attributes['name'],
-            'description' => $attributes['description']
-        ]);
-
-        if (isset($attributes['cities'])) {
-            $cities = City::whereIn('name', $attributes['cities'])->get();
-            $airline->cities()->attach($cities);
-        }
-
+        $airlineData = $request->toDto();
+        $airline = $storeAirlineAction->execute($airlineData);
         return response()->json($airline);
     }
 }

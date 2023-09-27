@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\DataTransferObjects\CityData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpsertCityRequest extends FormRequest
@@ -17,4 +18,13 @@ class UpsertCityRequest extends FormRequest
             'name' => ['required', 'unique:cities']
         ];
     }
+
+    public function toDto(): CityData
+    {
+        return new CityData(
+            name: $this->input('name')
+        );
+    }
+
+
 }

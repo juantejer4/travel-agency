@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\Airline;
 
-use App\Models\Airline;
+use App\Http\ViewModels\AirlineViewModel;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class GetAirlineController
 {
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(AirlineViewModel $viewModel): JsonResponse
     {
-        $response = [];
-        $airlines = Airline::with(['cities'])->withCount('incomingFlights')->paginate(intval($request->get('per_page', 15)));
-        
-        $response['data'] = $airlines;
-        return response()->json($response);
+        return response()->json(['data' => $viewModel->airlines()]);
     }
 }

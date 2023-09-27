@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\City;
 
+use App\Actions\City\StoreCityAction;
 use App\Http\Requests\UpsertCityRequest;
-use App\Models\City;
 use Illuminate\Http\JsonResponse;
 
 class StoreCityController
 {
-    public function __invoke(UpsertCityRequest $request): JsonResponse
+    public function __invoke(UpsertCityRequest $request, StoreCityAction $storeCityAction): JsonResponse
     {
-        $city = City::create($request->validated());
+        $cityData = $request->toDto();
+        $city = $storeCityAction->execute($cityData);
         return response()->json($city);
     }
 }

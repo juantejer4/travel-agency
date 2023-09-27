@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Flight;
 
+use App\Actions\Flight\StoreFlightAction;
 use App\Http\Requests\UpsertFlightRequest;
-use App\Models\Flight;
 use Illuminate\Http\JsonResponse;
 
 class StoreFlightController
 {
-    public function __invoke(UpsertFlightRequest $request): JsonResponse
+    public function __invoke(UpsertFlightRequest $request, StoreFlightAction $storeFlightAction): JsonResponse
     {
-        $flights = Flight::create($request->validated());
+        $flightData = $request->toDto();
+        $flights = $storeFlightAction->execute($flightData);
         return response()->json($flights);
     }
 }

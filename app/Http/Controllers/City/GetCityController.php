@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\City;
 
-use App\Models\City;
+use App\Http\ViewModels\CityViewModel;
 use Illuminate\Http\JsonResponse;
 
 class GetCityController
 {
-    public function __invoke(): JsonResponse
+    public function __invoke(CityViewModel $viewModel): JsonResponse
     {
-        $cities = City::withCount(['arrivingFlights', 'departingFlights'])->paginate();
-
-        $response['data'] = $cities;
-        return response()->json($response);
+        return response()->json(['data' => $viewModel->cities()]);
     }
+
 }
