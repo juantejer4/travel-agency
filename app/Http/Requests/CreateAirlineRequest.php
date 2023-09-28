@@ -24,8 +24,10 @@ class CreateAirlineRequest extends FormRequest
 
     public function toDto(): AirlineData
     {
-        return new AirlineData(name: $this->input('name'),
-                                description: $this->input('description'),
-                                cities:$this->input('cities'));
+        return new AirlineData(
+            name: $this->input('name'),
+            description: $this->input('description') ?? '',
+            cities: $this->input('cities')
+        );
     }
 }

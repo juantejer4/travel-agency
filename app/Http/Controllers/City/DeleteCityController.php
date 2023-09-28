@@ -10,6 +10,6 @@ class DeleteCityController
     public function __invoke(City $city): JsonResponse
     {
         $city->delete();
-        return response()->json(['success' => 'City deleted']);
+        return responder()->success(['success' => 'City deleted'])->respond();
     }
 }

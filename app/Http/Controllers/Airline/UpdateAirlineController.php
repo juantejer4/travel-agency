@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Airline;
 use App\Actions\Airline\UpdateAirlineAction;
 use App\Http\Requests\UpdateAirlineRequest;
 use App\Models\Airline;
+use App\Transformers\AirlineTransformer;
 use Illuminate\Http\JsonResponse;
 
 class UpdateAirlineController
@@ -13,6 +14,7 @@ class UpdateAirlineController
     {
         $airlineData = $request->toDto();
         $updateAirlineAction->execute($airline, $airlineData);
-        return response()->json(['success' => 'City updated']);
+        return responder()->success($airline, AirlineTransformer::class)->respond();
     }
+
 }

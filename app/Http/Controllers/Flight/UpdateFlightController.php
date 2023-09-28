@@ -12,7 +12,8 @@ class UpdateFlightController
     public function __invoke(UpsertFlightRequest $request, Flight $flight, UpdateFlightAction $updateFlightAction): JsonResponse
     {
         $flightData = $request->toDto();
-        $updated = $updateFlightAction->execute($flight, $flightData);
-        return response()->json($updated);
+        $updateFlightAction->execute($flight, $flightData);
+        return responder()->success(['success' => 'Flight updated'])->respond();
     }
 }
+
