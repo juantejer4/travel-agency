@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let localOffset = date.getTimezoneOffset() * 60000;
     let localISOTime = new Date(date.getTime() - localOffset).toISOString();
 
-    showFlights();
+    //showFlights();
     createModal.querySelector(".departure-time").min = localISOTime.slice(
         0,
         16
