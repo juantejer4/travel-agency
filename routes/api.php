@@ -6,7 +6,7 @@ use App\Http\Controllers\Airline\StoreAirlineController;
 use App\Http\Controllers\Airline\UpdateAirlineController;
 
 use App\Http\Controllers\City\DeleteCityController;
-use App\Http\Controllers\City\GetCityController;
+use App\Http\Controllers\City\GetCitiesController;
 use App\Http\Controllers\City\StoreCityController;
 use App\Http\Controllers\City\UpdateCityController;
 
@@ -21,7 +21,7 @@ Route::group(['prefix' => 'cities'], function () {
     Route::post('/', StoreCityController::class);
     Route::delete('/{city}', DeleteCityController::class);
     Route::put('/{city}', UpdateCityController::class);
-    Route::get('/', GetCityController::class);
+    Route::get('/', GetCitiesController::class);
 });
 
 Route::group(['prefix' => 'airlines'], function () {

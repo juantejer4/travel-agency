@@ -7,13 +7,11 @@ use App\Models\City;
 use App\Transformers\CityTransformer;
 use Illuminate\Http\JsonResponse;
 
-class GetCityController
+class GetCitiesController
 {
     public function __invoke(): JsonResponse
     {
         $cities = City::withCount(['arrivingFlights', 'departingFlights'])->paginate();
-
-        $response['data'] = $cities;
-        return response()->json($response);
+        return responder()->success($cities, CityTransformer::class)->respond();
     }
 }

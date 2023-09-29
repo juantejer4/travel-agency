@@ -136,8 +136,7 @@ $("#add-city-form").submit(function (e) {
 });
 function generateCityTableRows(response) {
     let rows = "";
-
-    response.data.forEach(function (city) {
+    response.forEach(function (city) {
         rows += generateCityRow(city);
     });
     return rows;
