@@ -184,7 +184,6 @@ function showFlights() {
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const flights = JSON.parse(xhr.responseText).data;
-                console.log(flights)
                 const rows = generateFlightsTableRows(flights);
                 document.querySelector(".dynamic-tbody").innerHTML = rows;
             } else {
