@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let localOffset = date.getTimezoneOffset() * 60000;
     let localISOTime = new Date(date.getTime() - localOffset).toISOString();
 
+    //showFlights();
     createModal.querySelector(".departure-time").min = localISOTime.slice(
         0,
         16
@@ -133,15 +134,14 @@ document.addEventListener("click", function (event) {
 });
 
 function generateFlightsTableRows(response) {
-    flights = response.data;
-    const rows = flights.map(generateFlightRow);
+    const rows = response.map(generateFlightRow);
     return rows.join("");
 }
 
 function generateFlightRow(flight) {
-    const originName = flight.origin.name;
-    const destinationName = flight.destination.name;
-    const airlineName = flight.airline.name;
+    const originName = flight.origin;
+    const destinationName = flight.destination;
+    const airlineName = flight.airline;
     return `
             <tr id="flight-${flight.id}" data-flight='${JSON.stringify(
         flight
@@ -200,7 +200,6 @@ function showFlights() {
 
 $(document).ready(async function () {
     await getAirlines();
-
     $(".airlines").select2({
         data: formatAirlinesForSelect(airlines),
         placeholder: "Airline",
@@ -281,7 +280,7 @@ function formatDate(dateString) {
 async function getAirlines() {
     try {
         const response = await axios.get("api/airlines?per_page=1000");
-        airlines = response.data.data.data;
+        airlines = response.data.data;
     } catch (error) {
         console.error(error);
     }

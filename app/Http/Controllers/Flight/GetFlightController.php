@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Flight;
 
 use App\Actions\Flight\GetFlightsAction;
 use App\Http\Requests\GetFlightRequest;
+use App\Transformers\FlightTransformer;
 use Illuminate\Http\JsonResponse;
 
 class GetFlightController
@@ -12,10 +13,8 @@ class GetFlightController
     {
         $flights = $getFlightsAction->execute($request);
 
-        $response['data'] = $flights;
-        $response['links'] = strval($flights->links());
-
-        return response()->json($response);
+        return responder()->success($flights, FlightTransformer::class)
+            ->meta(['links'=>strval($flights->links())])->respond();
     }
 }
 

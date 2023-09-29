@@ -10,6 +10,6 @@ class DeleteFlightController
     public function __invoke(Flight $flight): JsonResponse
     {
         $flight->delete();
-        return response()->json(['success' => 'Flight deleted']);
+        return responder()->success(['success' => 'Flight deleted'])->respond();
     }
 }

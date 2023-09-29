@@ -12,7 +12,7 @@ class UpdateCityController
     public function __invoke(UpsertCityRequest $request, City $city, UpdateCityAction $updateCityAction): JsonResponse
     {
         $cityData = $request->toDto();
-        $updated = $updateCityAction->execute($city, $cityData);
-        return response()->json(['success' => $updated ? 'City updated' : 'Update failed']);
+        $updateCityAction->execute($city, $cityData);
+        return responder()->success(['success' => 'City updated'])->respond();
     }
 }

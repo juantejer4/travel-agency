@@ -4,6 +4,7 @@ namespace App\Http\Controllers\City;
 
 use App\Actions\City\StoreCityAction;
 use App\Http\Requests\UpsertCityRequest;
+use App\Transformers\CityTransformer;
 use Illuminate\Http\JsonResponse;
 
 class StoreCityController
@@ -12,6 +13,6 @@ class StoreCityController
     {
         $cityData = $request->toDto();
         $city = $storeCityAction->execute($cityData);
-        return response()->json($city);
+        return responder()->success($city, CityTransformer::class)->respond();
     }
 }

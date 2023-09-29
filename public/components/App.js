@@ -53,8 +53,8 @@ export default {
                 })
                 .then((response) => {
                     this.links = response.data.links;
-                    this.flights = response.data.data.data;
-                    this.sortParams.page = response.data.data.current_page;
+                    this.flights = response.data.data;
+                    this.sortParams.page = response.data.pagination.currentPage;
                 })
                 .catch((error) => console.error(error));
         },

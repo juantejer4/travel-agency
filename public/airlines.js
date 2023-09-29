@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("#edit-description").value =
                 airline.description;
             document.querySelector("#edit-description").placeholder =
-                airline.description !== null
+                airline.description !== ''
                     ? airline.description
                     : "[No description]";
             editModal.classList.remove("invisible");
@@ -193,8 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function generateAirlinesTableRows(response) {
-    let airlines = response.data;
-    return airlines.map(generateAirlineRow).join('');;
+    return response.map(generateAirlineRow).join('');
 }
 function generateAirlineRow(airline) {
     return `
