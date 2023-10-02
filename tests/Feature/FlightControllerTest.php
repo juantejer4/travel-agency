@@ -25,7 +25,7 @@ it('gets flights for an airline ', function () {
         'destination_city_id' => $destination->id,
     ]);
 
-    $this->get(route('flights.get'))
+    $this->getJson(route('flights.get'))
         ->assertSuccessful()
         ->assertJsonFragment([
             'airline' => $airline->name,
@@ -38,7 +38,7 @@ it('creates a flight with empty parameters', function ($data, $errorKey) {
     City::factory(2)->create();
     Airline::factory()->create();
 
-    $this->json('POST',route('flights.store'), $data)
+    $this->postJson(route('flights.store'), $data)
         ->assertUnprocessable()
         ->assertJsonValidationErrors($errorKey);
 })->with(
@@ -102,7 +102,7 @@ it('creates a flights with valid parameters', function (){
         'arrival_time' => '2023-09-11T15:19'
     ];
 
-    $this->json('POST', route('flights.store'), $flightData)
+    $this->postJson(route('flights.store'), $flightData)
         ->assertOk()
         ->assertJson([
             'status' => 200,
@@ -118,7 +118,7 @@ it('tries to create a flight with invalid city id but fails', function ($data, $
     City::factory()->create();
     Airline::factory()->create();
 
-    $this->json('POST', route('flights.store'), $data)
+    $this->postJson(route('flights.store'), $data)
         ->assertUnprocessable()
         ->assertJsonValidationErrors($errorKey);
 })->with([
@@ -160,7 +160,7 @@ it('tries to create a flight with invalid city id but fails', function ($data, $
 it('attempts to create a flight with same origin and destination but fails', function(){
     City::factory(2)->create();
 
-    $this->json('POST', route('flights.store'), [
+    $this->postJson(route('flights.store'), [
         'airline_id' => 1,
         'origin_city_id' => 2,
         'destination_city_id' => 2,
@@ -174,7 +174,7 @@ it('attempts to create a flight with same origin and destination but fails', fun
 it('tries to create a flight with departure time after arrival time but fails', function (){
     City::factory(2)->create();
 
-    $this->json('POST', route('flights.store'), [
+    $this->postJson(route('flights.store'), [
         'airline_id' => 1,
         'origin_city_id' => 1,
         'destination_city_id' => 2,
@@ -202,7 +202,7 @@ it('updates a flight with valid parameters', function(){
 
     $flight = Flight::factory()->create($flightData);
 
-    $this->json('PUT', route('flights.update', ['flight' => $flight]), $flightData)
+    $this->putJson(route('flights.update', ['flight' => $flight]), $flightData)
         ->assertOk()
         ->assertJson([
             'status' => 200,
@@ -230,7 +230,7 @@ it('updates a flight with invalid parameters', function ($data, $errorKey) {
 
     $flight = Flight::factory()->create($flightData);
 
-    $this->json('PUT', route('flights.update', ['flight' => $flight]), $data)
+    $this->putJson(route('flights.update', ['flight' => $flight]), $data)
         ->assertUnprocessable()
         ->assertJsonValidationErrors($errorKey);
 
@@ -292,7 +292,7 @@ it('updates a flight with same origin and destination', function (){
         'departure_time' => '2023-09-11T11:18',
         'arrival_time' => '2023-09-11T15:19'
     ];
-    $this->json('PUT', route('flights.update', ['flight' => $flight]), $repeatedCities)
+    $this->putJson(route('flights.update', ['flight' => $flight]), $repeatedCities)
         ->assertUnprocessable()
         ->assertJsonValidationErrors('destination_city_id');
 });
@@ -314,7 +314,7 @@ it('tries to update a flight with invalid parameters', function ($data, $errorKe
 
     $flight = Flight::factory()->create($flightData);
 
-    $this->json('PUT', route('flights.update', ['flight' => $flight]), $data)
+    $this->putJson(route('flights.update', ['flight' => $flight]), $data)
         ->assertUnprocessable()
         ->assertJsonValidationErrors($errorKey);
 })->with(
@@ -376,7 +376,7 @@ it('updates a flight with invalid airline', function (){
         'departure_time' => '2023-09-11T11:18',
         'arrival_time' => '2023-09-11T15:19'
     ];
-    $this->json('PUT', route('flights.update', ['flight' => $flight]), $invalidAirline)
+    $this->putJson(route('flights.update', ['flight' => $flight]), $invalidAirline)
         ->assertUnprocessable()
         ->assertJsonValidationErrors('airline_id');
 });
@@ -405,7 +405,7 @@ it('updates flight with departure time after arrival time', function(){
         'departure_time' => '2023-09-11T16:18',
         'arrival_time' => '2023-09-11T15:19'
     ];
-    $this->json('PUT', route('flights.update', ['flight' => $flight]), $invalidTimes)
+    $this->putJson(route('flights.update', ['flight' => $flight]), $invalidTimes)
         ->assertUnprocessable()
         ->assertJsonValidationErrors('arrival_time');
 });
@@ -427,7 +427,7 @@ it('updates a flight with empty parameters', function ($data, $errorKey) {
 
     $flight = Flight::factory()->create($flightData);
 
-    $this->json('PUT', route('flights.update', ['flight' => $flight]), $data)
+    $this->putJson(route('flights.update', ['flight' => $flight]), $data)
         ->assertUnprocessable()
         ->assertJsonValidationErrors($errorKey);
 })->with([
@@ -491,17 +491,9 @@ it('deletes a flight correctly', function (){
     $cityIds = $cities->pluck('id')->toArray();
     $airline->cities()->attach($cityIds);
 
-    $flightData = [
-        'airline_id' => 1,
-        'origin_city_id' => 1,
-        'destination_city_id' => 2,
-        'departure_time' => '2023-09-11T11:18',
-        'arrival_time' => '2023-09-11T15:19'
-    ];
+    $flight = Flight::factory()->create();
 
-    $flight = Flight::factory()->create($flightData);
-
-    $this->json('DELETE', route('flights.delete', ['flight' => $flight]))
+    $this->deleteJson(route('flights.delete', ['flight' => $flight]))
         ->assertOk();
 
     $this->assertDatabaseMissing('flights', ['id' => $flight->id]);
