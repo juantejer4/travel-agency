@@ -22,14 +22,16 @@ class FlightFactory extends Factory
         $modifiedDepartureTime = clone $departureTime;
         $arrivalTime = $this->faker->dateTimeBetween($departureTime, $modifiedDepartureTime->modify('+6 hours'));
 
-        $airline = Airline::inRandomOrder()->firstOrFail();
+        $origin = City::factory()->create();
+        $destination = City::factory()->create();
+        $airline = Airline::factory()->create();
 
         return [
             'departure_time' => $departureTime,
             'arrival_time' => $arrivalTime,
             'airline_id' => $airline->id,
-            'origin_city_id' => $airline->cities->random()->id,
-            'destination_city_id' => $airline->cities->random()->id
+            'origin_city_id' => $origin->id,
+            'destination_city_id' => $destination->id
         ];
     }
 }
